@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Editor de Foto con Marco</title>
+  <title>SOY CONGRESISTA</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="logo-header">
+    <img src="assets/logo.png" alt="Logo" class="logo-img" />
+    <h1>SOY CONGRESISTA</h1>
+    <h2>II CONGRESO INTERNO ESTUDIANTIL</h2>
+  </header>
+
   <div class="container">
     <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
     <canvas id="canvas" width="1920" height="1920"></canvas>
@@ -14,6 +20,7 @@
     <p id="info">Puedes mover y escalar la imagen</p>
     <div id="mensaje-flotante" class="mensaje-flotante">Puedes arrastrar y escalar tu foto</div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
