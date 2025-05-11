@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Foto con Marco</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea tu Foto Enmarcada</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Sube tu foto y descárgala con un marco</h1>
-  
-  <input type="file" id="upload" accept="image/*" />
-  <canvas id="canvas" width="500" height="500"></canvas>
-  <br />
-  <button id="download">Descargar imagen</button>
+    <div class="container">
+        <header>
+            <img src="assets/logo.png" alt="Logo" class="logo">
+            <h1>SI ERES CONGRESISTA, SUBE TU FOTO Y LLEVATE UN RECUERDO</h1>
+        </header>
+        <input type="file" id="upload-image" accept="image/*">
+        <div class="canvas-container">
+            <canvas id="image-canvas"></canvas>
+        </div>
+        <button id="download-button" disabled>Descargar Imagen Enmarcada</button>
+    </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
