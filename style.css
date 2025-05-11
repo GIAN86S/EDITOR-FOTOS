@@ -1,3 +1,4 @@
+/* Fondo con degradado de rojo fuerte a claro (arriba) y azul fuerte a claro (abajo) */
 body {
   margin: 0;
   padding: 0;
@@ -11,17 +12,20 @@ body {
   color: white;
 }
 
+/* Cabecera con el logo y títulos */
 .logo-header {
   text-align: center;
   margin-top: 20px;
 }
 
+/* Tamaño del logo (más grande) */
 .logo-img {
-  width: 250px;
+  width: 160px;
   height: auto;
   margin-bottom: 10px;
 }
 
+/* Estilos de los títulos */
 h1 {
   margin: 5px 0;
   font-size: 28px;
@@ -33,12 +37,14 @@ h2 {
   font-weight: normal;
 }
 
+/* Contenedor de los elementos */
 .container {
   text-align: center;
   max-width: 100%;
   padding: 10px;
 }
 
+/* Canvas (zona donde se edita la imagen) */
 canvas {
   border: 1px solid #ccc;
   max-width: 100%;
@@ -47,9 +53,24 @@ canvas {
   margin-top: 20px;
 }
 
-input[type="file"],
-button {
+/* Estilos para botones e input de archivo */
+input[type="file"] {
   margin-top: 15px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Botón de descarga con fondo amarillo */
+button#descargar {
+  margin-top: 10px;
   background: yellow;
   padding: 12px 20px;
   border-radius: 8px;
@@ -62,6 +83,7 @@ button {
   margin-right: auto;
 }
 
+/* Burbuja flotante informativa */
 .mensaje-flotante {
   display: none;
   position: fixed;
@@ -77,6 +99,7 @@ button {
   animation: aparecer 0.5s ease-out;
 }
 
+/* Animación de entrada del mensaje */
 @keyframes aparecer {
   from {
     opacity: 0;
