@@ -1,93 +1,150 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const upload = document.getElementById("upload");
-const downloadBtn = document.getElementById("download");
-const info = document.getElementById("info");
+const uploadImage = document.getElementById('upload-image');
+const imageCanvas = document.getElementById('image-canvas');
+const downloadButton = document.getElementById('download-button');
+const ctx = imageCanvas.getContext('2d');
 
-const marco = new Image();
-marco.src = "assets/marco.png"; // Tu marco de 1920x1920
-
-let fotoUsuario = new Image();
-let escala = 1;
-let offsetX = 0;
-let offsetY = 0;
-
-upload.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file || !file.type.match(/^image\/(png|jpeg|jpg)$/)) {
-    alert("Por favor sube una imagen JPG, JPEG o PNG.");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    fotoUsuario = new Image();
-    fotoUsuario.onload = () => {
-      escala = Math.min(canvas.width / fotoUsuario.width, canvas.height / fotoUsuario.height);
-      offsetX = (canvas.width - fotoUsuario.width * escala) / 2;
-      offsetY = (canvas.height - fotoUsuario.height * escala) / 2;
-      info.style.display = "block";
-      dibujar();
-    };
-    fotoUsuario.src = evt.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-canvas.addEventListener("wheel", (e) => {
-  e.preventDefault();
-  escala += e.deltaY * -0.001;
-  escala = Math.min(Math.max(0.1, escala), 5);
-  dibujar();
-});
+let userImage = new Image();
+const frameImage = new Image();
+frameImage.src = 'assets/marco.png'; // Asegúrate de que 'marco.png' esté en la carpeta 'assets'
 
 let isDragging = false;
 let startX, startY;
+let scale = 1;
+let offsetX = 0;
+let offsetY = 0;
 
-canvas.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  startX = e.offsetX;
-  startY = e.offsetY;
-});
+function drawImageOnCanvas() {
+    ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
 
-canvas.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
-  offsetX += e.offsetX - startX;
-  offsetY += e.offsetY - startY;
-  startX = e.offsetX;
-  startY = e.offsetY;
-  dibujar();
-});
+    // Dibujar la imagen del usuario ajustada
+    const scaledWidth = userImage.width * scale;
+    const scaledHeight = userImage.height * scale;
+    const x = offsetX + (imageCanvas.width - scaledWidth) / 2;
+    const y = offsetY + (imageCanvas.height - scaledHeight) / 2;
+    ctx.drawImage(userImage, x, y, scaledWidth, scaledHeight);
 
-canvas.addEventListener("mouseup", () => (isDragging = false));
-canvas.addEventListener("mouseleave", () => (isDragging = false));
-
-downloadBtn.addEventListener("click", () => {
-  const enlace = document.createElement("a");
-  enlace.download = "foto_con_marco.png";
-  enlace.href = canvas.toDataURL("image/png");
-  enlace.click();
-});
-
-function dibujar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (fotoUsuario.src && fotoUsuario.complete) {
-    const w = fotoUsuario.width * escala;
-    const h = fotoUsuario.height * escala;
-
-    ctx.save();
-    ctx.globalAlpha = 0.95;
-    ctx.drawImage(fotoUsuario, offsetX, offsetY, w, h);
-    ctx.restore();
-
-    // Guía visual
-    ctx.save();
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(offsetX, offsetY, w, h);
-    ctx.restore();
-  }
-
-  ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
+    // Dibujar el marco PNG encima
+    ctx.drawImage(frameImage, 0, 0, imageCanvas.width, imageCanvas.height);
 }
+
+uploadImage.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            userImage.onload = function() {
+                // Asegurar relación 1:1 y ajustar tamaño inicial del canvas
+                const size = Math.min(userImage.width, userImage.height);
+                imageCanvas.width = size;
+                imageCanvas.height = size;
+                scale = 1;
+                offsetX = 0;
+                offsetY = 0;
+                drawImageOnCanvas();
+                downloadButton.disabled = false;
+            }
+            userImage.src = event.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+frameImage.onload = () => {
+    // Asegurarse de que el marco se dibuje incluso si no se ha cargado una imagen aún
+    if (userImage.src) {
+        drawImageOnCanvas();
+    }
+};
+
+// Interacciones para escritorio (arrastrar y zoom con rueda)
+imageCanvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX - offsetX;
+    startY = e.clientY - offsetY;
+    imageCanvas.style.cursor = 'grab';
+});
+
+imageCanvas.addEventListener('mouseup', () => {
+    isDragging = false;
+    imageCanvas.style.cursor = 'default';
+});
+
+imageCanvas.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    offsetX = e.clientX - startX;
+    offsetY = e.clientY - startY;
+    drawImageOnCanvas();
+});
+
+imageCanvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomSpeed = 0.05;
+    const scaleFactor = e.deltaY > 0 ? (1 - zoomSpeed) : (1 + zoomSpeed);
+    scale *= scaleFactor;
+    drawImageOnCanvas();
+});
+
+// Interacciones para dispositivos móviles (táctiles)
+let initialPinchDistance = null;
+let initialScale = scale;
+
+imageCanvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+        initialPinchDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialScale = scale;
+    } else if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - offsetX;
+        startY = e.touches[0].clientY - offsetY;
+    }
+});
+
+imageCanvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 2 && initialPinchDistance !== null) {
+        const currentPinchDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+        scale = initialScale * (currentPinchDistance / initialPinchDistance);
+        drawImageOnCanvas();
+    } else if (e.touches.length === 1 && isDragging) {
+        offsetX = e.touches[0].clientX - startX;
+        offsetY = e.clientY - startY;
+        drawImageOnCanvas();
+    }
+});
+
+imageCanvas.addEventListener('touchend', () => {
+    initialPinchDistance = null;
+    isDragging = false;
+});
+
+downloadButton.addEventListener('click', () => {
+    // Crear un canvas temporal para la descarga con resolución máxima
+    const downloadCanvas = document.createElement('canvas');
+    const downloadSize = Math.min(Math.max(userImage.width * scale, userImage.height * scale), 1920);
+    downloadCanvas.width = downloadSize;
+    downloadCanvas.height = downloadSize;
+    const downloadCtx = downloadCanvas.getContext('2d');
+
+    // Calcular la posición para centrar la imagen escalada
+    const scaledWidth = userImage.width * scale;
+    const scaledHeight = userImage.height * scale;
+    const x = (downloadSize - scaledWidth) / 2 + offsetX * (downloadSize / imageCanvas.width);
+    const y = (downloadSize - scaledHeight) / 2 + offsetY * (downloadSize / imageCanvas.height);
+
+    downloadCtx.drawImage(userImage, x, y, scaledWidth, scaledHeight);
+    downloadCtx.drawImage(frameImage, 0, 0, downloadSize, downloadSize);
+
+    const dataURL = downloadCanvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = 'recuerdo_congresista.png'; // Cambiar el nombre del archivo de descarga
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
