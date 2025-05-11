@@ -17,7 +17,7 @@ body {
 }
 
 .logo-img {
-  width: 100px;
+  width: 160px;
   height: auto;
   margin-bottom: 10px;
 }
@@ -44,34 +44,22 @@ canvas {
   max-width: 100%;
   height: auto;
   touch-action: none;
+  margin-top: 20px;
 }
 
-input[type="file"] {
-  margin: 20px 0;
+input[type="file"],
+button {
+  margin-top: 15px;
   background: white;
-  padding: 10px;
+  padding: 12px 20px;
   border-radius: 8px;
   color: black;
   font-weight: bold;
   cursor: pointer;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
   font-size: 16px;
-  background: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-#info {
-  display: none;
-  margin-top: 10px;
-  color: white;
-  font-size: 18px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .mensaje-flotante {
@@ -80,10 +68,10 @@ button {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 103, 188, 0.9); /* azul claro */
+  background: rgba(0, 103, 188, 0.95);
   color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
+  padding: 14px 24px;
+  border-radius: 10px;
   font-size: 16px;
   z-index: 999;
   animation: aparecer 0.5s ease-out;
