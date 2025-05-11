@@ -2,24 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <!-- Hace que se vea bien en celulares y evita el zoom con dedos -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>SOY CONGRESISTA</title>
+  <!-- Estilos externos -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- Encabezado con el logo y títulos -->
   <header class="logo-header">
     <img src="assets/logo.png" alt="Logo" class="logo-img" />
     <h1>SOY CONGRESISTA</h1>
     <h2>II CONGRESO INTERNO ESTUDIANTIL</h2>
   </header>
 
+  <!-- Área principal de interacción -->
   <div class="container">
+    <!-- Botón para subir la imagen (solo .jpg, .jpeg y .png) -->
     <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
+
+    <!-- Botón para descargar la imagen con el marco -->
     <button id="descargar">Descargar imagen</button>
+
+    <!-- Lienzo donde se muestra la imagen y el marco -->
     <canvas id="canvas" width="1920" height="1920"></canvas>
-    <div id="mensaje-flotante" class="mensaje-flotante">Imagen subida. Puedes mover y acomodar la imagen.</div>
+
+    <!-- Mensaje flotante cuando se sube una imagen -->
+    <div id="mensaje-flotante" class="mensaje-flotante">
+      Imagen subida. Puedes mover y acomodar la imagen.
+    </div>
   </div>
 
+  <!-- Script JavaScript para interactividad -->
   <script src="script.js"></script>
 </body>
 </html>
