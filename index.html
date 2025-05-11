@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Editor de Foto con Marco</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -12,6 +12,7 @@
   <p id="info" class="info-message">Puedes reescalar y mover tu imagen dentro del marco.</p>
   <div class="canvas-container">
     <canvas id="canvas" width="1920" height="1920"></canvas>
+    <div id="mensaje-flotante" class="mensaje-flotante">Puedes arrastrar y escalar tu foto</div>
   </div>
   <button id="download">Descargar imagen</button>
   <script src="script.js"></script>
