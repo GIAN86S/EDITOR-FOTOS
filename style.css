@@ -2,23 +2,48 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: linear-gradient(to bottom, #8b0000, #ff9999 50%, #00008b 50%, #add8e6);
+  background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #000080 60%, #0067bc);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   flex-direction: column;
+  color: white;
+}
+
+.logo-header {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.logo-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 5px 0;
+  font-size: 28px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: normal;
 }
 
 .container {
   text-align: center;
   max-width: 100%;
+  padding: 10px;
 }
 
 canvas {
   border: 1px solid #ccc;
   max-width: 100%;
   height: auto;
+  touch-action: none;
 }
 
 input[type="file"] {
@@ -26,6 +51,9 @@ input[type="file"] {
   background: white;
   padding: 10px;
   border-radius: 8px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 button {
@@ -36,6 +64,7 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 #info {
@@ -51,7 +80,7 @@ button {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 255, 0.8);
+  background: rgba(0, 103, 188, 0.9); /* azul claro */
   color: white;
   padding: 12px 20px;
   border-radius: 8px;
