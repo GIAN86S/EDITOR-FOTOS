@@ -1,75 +1,73 @@
-const input = document.getElementById("imagen");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const upload = document.getElementById("upload");
+const downloadBtn = document.getElementById("download");
 const info = document.getElementById("info");
+
 const marco = new Image();
-marco.src = "assets/marco.png";
+marco.src = "assets/marco.png"; // Tu marco de 1920x1920
 
 let fotoUsuario = new Image();
-let offsetX = 0, offsetY = 0, escala = 1;
-let arrastrando = false;
-let startX, startY;
+let escala = 1;
+let offsetX = 0;
+let offsetY = 0;
 
-input.addEventListener("change", (e) => {
-  const archivo = e.target.files[0];
-  if (!archivo) return;
-  const lector = new FileReader();
-  lector.onload = (ev) => {
+upload.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file || !file.type.match(/^image\/(png|jpeg|jpg)$/)) {
+    alert("Por favor sube una imagen JPG, JPEG o PNG.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
     fotoUsuario = new Image();
     fotoUsuario.onload = () => {
       escala = Math.min(canvas.width / fotoUsuario.width, canvas.height / fotoUsuario.height);
       offsetX = (canvas.width - fotoUsuario.width * escala) / 2;
       offsetY = (canvas.height - fotoUsuario.height * escala) / 2;
       info.style.display = "block";
-      mostrarMensajeFlotante();
       dibujar();
     };
-    fotoUsuario.src = ev.target.result;
+    fotoUsuario.src = evt.target.result;
   };
-  lector.readAsDataURL(archivo);
+  reader.readAsDataURL(file);
 });
 
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  escala += e.deltaY * -0.001;
+  escala = Math.min(Math.max(0.1, escala), 5);
+  dibujar();
+});
+
+let isDragging = false;
+let startX, startY;
+
 canvas.addEventListener("mousedown", (e) => {
-  arrastrando = true;
+  isDragging = true;
   startX = e.offsetX;
   startY = e.offsetY;
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (!arrastrando) return;
-  const dx = e.offsetX - startX;
-  const dy = e.offsetY - startY;
-  offsetX += dx;
-  offsetY += dy;
+  if (!isDragging) return;
+  offsetX += e.offsetX - startX;
+  offsetY += e.offsetY - startY;
   startX = e.offsetX;
   startY = e.offsetY;
   dibujar();
 });
 
-canvas.addEventListener("mouseup", () => (arrastrando = false));
-canvas.addEventListener("mouseleave", () => (arrastrando = false));
-canvas.addEventListener("wheel", (e) => {
-  e.preventDefault();
-  const scaleAmount = 0.05;
-  escala += e.deltaY < 0 ? scaleAmount : -scaleAmount;
-  escala = Math.max(0.1, escala);
-  dibujar();
-});
+canvas.addEventListener("mouseup", () => (isDragging = false));
+canvas.addEventListener("mouseleave", () => (isDragging = false));
 
-document.getElementById("descargar").addEventListener("click", () => {
-  const link = document.createElement("a");
-  link.download = "imagen_con_marco.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+downloadBtn.addEventListener("click", () => {
+  const enlace = document.createElement("a");
+  enlace.download = "foto_con_marco.png";
+  enlace.href = canvas.toDataURL("image/png");
+  enlace.click();
 });
-
-function mostrarMensajeFlotante() {
-  const mensaje = document.getElementById("mensaje-flotante");
-  mensaje.style.display = "block";
-  setTimeout(() => {
-    mensaje.style.display = "none";
-  }, 5000);
-}
 
 function dibujar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -78,26 +76,16 @@ function dibujar() {
     const w = fotoUsuario.width * escala;
     const h = fotoUsuario.height * escala;
 
-    ctx.drawImage(fotoUsuario, offsetX, offsetY, w, h);
-
-    // Guía de recorte
     ctx.save();
-    ctx.strokeStyle = "rgba(0, 128, 255, 0.8)";
-    ctx.lineWidth = 3;
-    ctx.setLineDash([10, 5]);
-    ctx.strokeRect(offsetX, offsetY, w, h);
+    ctx.globalAlpha = 0.95;
+    ctx.drawImage(fotoUsuario, offsetX, offsetY, w, h);
     ctx.restore();
 
-    // Líneas guía cruzadas
+    // Guía visual
     ctx.save();
-    ctx.strokeStyle = "rgba(0, 128, 255, 0.4)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(offsetX + w / 2, offsetY);
-    ctx.lineTo(offsetX + w / 2, offsetY + h);
-    ctx.moveTo(offsetX, offsetY + h / 2);
-    ctx.lineTo(offsetX + w, offsetY + h / 2);
-    ctx.stroke();
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(offsetX, offsetY, w, h);
     ctx.restore();
   }
 
