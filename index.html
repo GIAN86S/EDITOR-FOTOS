@@ -1,40 +1,54 @@
 <!DOCTYPE html>
+<!-- Declaración del tipo de documento para indicar que es un archivo HTML5 -->
 <html lang="es">
+<!-- Apertura del elemento HTML con el atributo "lang" que indica que el idioma principal es español -->
 <head>
   <meta charset="UTF-8" />
-  <!-- Hace que se vea bien en celulares y evita el zoom con dedos -->
+  <!-- Define la codificación de caracteres como UTF-8, lo que permite el uso de caracteres especiales -->
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>SOY CONGRESISTA</title>
-  <!-- Estilos externos -->
+  <!-- Configuración de la vista en dispositivos móviles para que la página se vea bien y evite el zoom con los dedos -->
+
+  <title>SOY CONGRESISTA USFX</title>
+  <!-- Define el título de la página que aparece en la pestaña del navegador -->
+
   <link rel="stylesheet" href="style.css" />
+  <!-- Enlace a una hoja de estilos externa para aplicar diseño a la página -->
 </head>
 <body>
+  <!-- Cuerpo del documento donde se define el contenido visible de la página -->
 
-  <!-- Encabezado con el logo y títulos -->
   <header class="logo-header">
+    <!-- Sección de encabezado con una clase CSS para aplicar estilos -->
     <img src="assets/logo.png" alt="Logo" class="logo-img" />
-    <h1>SOY CONGRESISTA</h1>
-    <h2>II CONGRESO INTERNO ESTUDIANTIL</h2>
+    <!-- Imagen del logo con una clase CSS para el estilo y un atributo "alt" para accesibilidad -->
+
+    <h1>SOY CONGRESISTA USFX</h1>
+    <!-- Título principal de la página -->
+
+    <h2>II CONGRESO INTERNO ESTUDIANTIL 2025</h2>
+    <!-- Subtítulo indicando el evento -->
   </header>
 
-  <!-- Área principal de interacción -->
   <div class="container">
-    <!-- Botón para subir la imagen (solo .jpg, .jpeg y .png) -->
+    <!-- Contenedor principal para los elementos de interacción -->
+    
     <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
+    <!-- Campo de entrada de archivos para que el usuario suba imágenes en formato JPG, JPEG o PNG -->
 
-    <!-- Botón para descargar la imagen con el marco -->
-    <button id="descargar">Descargar imagen</button>
+    <button id="descargar">Descargar Imagen</button>
+    <!-- Botón que permitirá descargar la imagen con el marco incorporado -->
 
-    <!-- Lienzo donde se muestra la imagen y el marco -->
     <canvas id="canvas" width="1920" height="1920"></canvas>
+    <!-- Elemento de lienzo donde se renderizará la imagen y su marco -->
 
-    <!-- Mensaje flotante cuando se sube una imagen -->
     <div id="mensaje-flotante" class="mensaje-flotante">
       Imagen subida. Puedes mover y acomodar la imagen.
     </div>
+    <!-- Mensaje flotante que aparece cuando se sube una imagen, dando instrucciones al usuario -->
   </div>
 
-  <!-- Script JavaScript para interactividad -->
   <script src="script.js"></script>
+  <!-- Inclusión del archivo JavaScript externo para manejar la interactividad de la página -->
 </body>
 </html>
