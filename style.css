@@ -1,112 +1,121 @@
-/* Fondo con degradado de rojo fuerte a claro (arriba) y azul fuerte a claro (abajo) */
+/* Estilos generales del cuerpo */
 body {
   margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #000080 60%, #0067bc);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #0067bc 70%, #000080);
   color: white;
-}
-
-/* Cabecera con el logo y títulos */
-.logo-header {
   text-align: center;
-  margin-top: 5px;
+  padding: 0;
 }
 
-/* Tamaño del logo (más grande) */
-.logo-img {
-  width: 200px;
+/* Encabezado con logo y títulos */
+header {
+  padding: 20px;
+}
+
+#logo {
+  width: 120px; /* Logo agrandado */
   height: auto;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
-/* Estilos de los títulos */
 h1 {
-  margin: 5px 0;
-  font-size: 28px;
+  font-size: 2rem;
+  margin: 0;
 }
 
 h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 5px 0 20px;
 }
 
-/* Contenedor de los elementos */
-.container {
-  text-align: center;
-  max-width: 100%;
-  padding: 10px;
+/* Contenedor del editor */
+#editor {
+  width: 90vw;
+  max-width: 600px;
+  margin: auto;
+  position: relative;
 }
 
-/* Canvas (zona donde se edita la imagen) */
 canvas {
-  border: 1px solid #ccc;
-  max-width: 100%;
+  width: 100%;
   height: auto;
-  touch-action: none;
-  margin-top: 20px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  background-color: white;
 }
 
-/* Estilos para botones e input de archivo */
-input[type="file"] {
-  margin-top: 15px;
-  background: white;
-  padding: 12px 20px;
-  border-radius: 8px;
+/* Input y botones */
+#inputImagen {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: white;
   color: black;
+  border: none;
+  border-radius: 5px;
+}
+
+#descargarImagen {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: yellow; /* Botón de descarga en amarillo */
+  color: black;
+  border: none;
+  border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  font-size: 16px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-/* Botón de descarga con fondo amarillo */
-button#descargar {
-  margin-top: 10px;
-  background: yellow;
-  padding: 12px 20px;
-  border-radius: 8px;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+/* Estadísticas de descarga y vistas */
+#estadisticas {
+  margin: 10px 0;
+  font-size: 1rem;
 }
 
-/* Burbuja flotante informativa */
-.mensaje-flotante {
-  display: none;
+#estadisticas span {
+  margin: 0 15px;
+}
+
+/* Mensaje flotante */
+#mensajeSubida {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
   position: fixed;
-  bottom: 20px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 103, 188, 0.95);
-  color: white;
-  padding: 14px 24px;
-  border-radius: 10px;
-  font-size: 16px;
-  z-index: 999;
-  animation: aparecer 0.5s ease-out;
+  z-index: 9999;
+  display: none;
+  font-size: 1rem;
 }
 
-/* Animación de entrada del mensaje */
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
+/* Mostrar mensaje */
+#mensajeSubida.visible {
+  display: block;
+}
+
+/* Advertencia */
+.advertencia {
+  font-size: 0.9rem;
+  margin-top: 20px;
+  color: #ffcccb;
+}
+
+/* Adaptabilidad para móviles */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5rem;
   }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+  h2 {
+    font-size: 1rem;
+  }
+  #logo {
+    width: 90px;
+  }
+  #inputImagen,
+  #descargarImagen {
+    width: 80%;
+    font-size: 1rem;
   }
 }
