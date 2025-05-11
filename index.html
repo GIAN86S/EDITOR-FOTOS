@@ -6,15 +6,15 @@
   <title>Editor de Foto con Marco</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="container">
-    <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
+  <h1>Sube tu foto</h1>
+  <input type="file" id="upload" accept="image/png, image/jpeg, image/jpg" />
+  <p id="info" class="info-message">Puedes reescalar y mover tu imagen dentro del marco.</p>
+  <div class="canvas-container">
     <canvas id="canvas" width="1920" height="1920"></canvas>
-    <button id="descargar">Descargar imagen</button>
-    <p id="info">Puedes mover y escalar la imagen</p>
-    <div id="mensaje-flotante" class="mensaje-flotante">Puedes arrastrar y escalar tu foto</div>
   </div>
+  <button id="download">Descargar imagen</button>
   <script src="script.js"></script>
 </body>
 </html>
-
