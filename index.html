@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <!-- Hace que se vea bien en celulares y evita el zoom con dedos -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SOY CONGRESISTA</title>
   <!-- Estilos externos -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <!-- Íconos de descarga y vista (usando Font Awesome CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-  <!-- Encabezado con el logo y títulos -->
-  <header class="logo-header">
-    <img src="assets/logo.png" alt="Logo" class="logo-img" />
-    <h1>SOY CONGRESISTA USFX</h1>
-    <h2>II CONGRESO INTERNO ESTUDIANTIL USFX</h2>
+  <!-- Encabezado con logo -->
+  <header>
+    <img src="logo.png" alt="Logo" id="logo">
+    <h1>SOY CONGRESISTA</h1>
+    <h2>II CONGRESO INTERNO ESTUDIANTIL</h2>
   </header>
 
-  <!-- Área principal de interacción -->
-  <div class="container">
-    <!-- Botón para subir la imagen (solo .jpg, .jpeg y .png) -->
-    <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
+  <!-- Contenedor principal -->
+  <main>
+    <!-- Botón de subir imagen -->
+    <input type="file" id="inputImagen" accept="image/jpeg, image/jpg, image/png">
+    <!-- Botón de descarga -->
+    <button id="descargarImagen">Descargar imagen</button>
 
-    <!-- Botón para descargar la imagen con el marco -->
-    <button id="descargar">Descargar Imagen</button>
-
-    <!-- Lienzo donde se muestra la imagen y el marco -->
-    <canvas id="canvas" width="1920" height="1920"></canvas>
-
-    <!-- Mensaje flotante cuando se sube una imagen -->
-    <div id="mensaje-flotante" class="mensaje-flotante">
-      Imagen subida. Puedes mover y acomodar la imagen.
+    <!-- Indicadores de descargas y vistas -->
+    <div id="estadisticas">
+      <span><i class="fas fa-download"></i> <span id="contadorDescargas">0</span></span>
+      <span><i class="fas fa-eye"></i> <span id="contadorVistas">0</span></span>
     </div>
-  </div>
 
-  <!-- Script JavaScript para interactividad -->
+    <!-- Mensaje flotante -->
+    <div id="mensajeSubida" class="oculto">Imagen subida, puedes mover o arrastrar tu foto.</div>
+
+    <!-- Lienzo para edición -->
+    <div id="editor">
+      <canvas id="canvas" width="1920" height="1920"></canvas>
+    </div>
+
+    <!-- Advertencia -->
+    <p class="advertencia">⚠️ Tu foto no se guarda en ningún almacenamiento permanente. Solo tú puedes descargarla.</p>
+  </main>
+
+  <!-- Script principal -->
   <script src="script.js"></script>
+
+  <!-- Script de contador de vistas (simulado) -->
+  <script>
+    // Aumentar contador de vistas (simulado con localStorage)
+    window.addEventListener('load', () => {
+      let vistas = localStorage.getItem('contadorVistas') || 0;
+      vistas++;
+      localStorage.setItem('contadorVistas', vistas);
+      document.getElementById('contadorVistas').textContent = vistas;
+    });
+  </script>
+
 </body>
 </html>
