@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor de Foto con Marco</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Sube tu foto</h1>
+  <input type="file" id="upload" accept="image/png, image/jpeg, image/jpg" />
+  <p id="info" class="info-message">Puedes reescalar y mover tu imagen dentro del marco.</p>
+  <div class="canvas-container">
+    <canvas id="canvas" width="1920" height="1920"></canvas>
+  </div>
+  <button id="download">Descargar imagen</button>
+  <script src="script.js"></script>
+</body>
+</html>
