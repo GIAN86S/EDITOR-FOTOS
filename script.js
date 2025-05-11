@@ -1,162 +1,138 @@
-// Obtener elementos del DOM
-const inputImagen = document.getElementById("inputImagen"); // Input para subir imagen
-const canvas = document.getElementById("canvas"); // Lienzo donde se edita la imagen
-const ctx = canvas.getContext("2d"); // Contexto 2D del canvas para dibujar
-const mensajeSubida = document.getElementById("mensajeSubida"); // Elemento para mostrar mensaje flotante
-const botonDescargar = document.getElementById("descargarImagen"); // Botón para descargar la imagen
-const contadorDescargas = document.getElementById("contadorDescargas"); // Contador de descargas en pantalla
+// Referencias a elementos HTML
+const input = document.getElementById("imagen");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const marco = new Image(); // Imagen del marco
+marco.src = "assets/marco.png";
 
-// Cargar el marco desde la carpeta assets
-const marco = new Image();
-marco.src = "assets/marco.png"; // Ruta al marco
+// Variables para controlar la imagen del usuario
+let fotoUsuario = new Image();
+let offsetX = 0, offsetY = 0, escala = 1;
+let arrastrando = false;
+let startX, startY;
+let lastTouchDist = null;
 
-let imagen = null; // Imagen cargada por el usuario
-let offsetX, offsetY; // Coordenadas para arrastrar la imagen
-let isDragging = false; // Indica si se está arrastrando
-let scale = 1; // Escala actual de la imagen
-let position = { x: 0, y: 0 }; // Posición actual de la imagen
+// Cuando se sube una imagen
+input.addEventListener("change", (e) => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
+  const lector = new FileReader();
 
-// Mostrar mensaje flotante durante 5 segundos
-function mostrarMensaje() {
-  mensajeSubida.classList.add("visible");
-  setTimeout(() => {
-    mensajeSubida.classList.remove("visible");
-  }, 5000);
-}
-
-// Evento al subir una imagen
-inputImagen.addEventListener("change", (e) => {
-  const archivo = e.target.files[0]; // Tomar el archivo seleccionado
-  if (!archivo) return; // Si no hay archivo, salir
-
-  const lector = new FileReader(); // Crear lector de archivo
-  lector.onload = function (evento) {
-    const img = new Image(); // Crear nueva imagen
-    img.onload = function () {
-      imagen = img; // Guardar imagen cargada
-      position = { x: canvas.width / 2 - img.width / 2, y: canvas.height / 2 - img.height / 2 }; // Centrar imagen
-      scale = 1; // Reiniciar escala
-      dibujarImagen(); // Dibujar imagen con marco
-      mostrarMensaje(); // Mostrar mensaje flotante
+  lector.onload = (ev) => {
+    fotoUsuario = new Image();
+    fotoUsuario.onload = () => {
+      // Calcula el escalado inicial para que encaje
+      escala = Math.min(canvas.width / fotoUsuario.width, canvas.height / fotoUsuario.height);
+      offsetX = (canvas.width - fotoUsuario.width * escala) / 2;
+      offsetY = (canvas.height - fotoUsuario.height * escala) / 2;
+      mostrarMensajeFlotante(); // Muestra mensaje
+      dibujar(); // Dibuja imagen y marco
     };
-    img.src = evento.target.result; // Leer imagen como data URL
+    fotoUsuario.src = ev.target.result;
   };
-  lector.readAsDataURL(archivo); // Iniciar lectura del archivo
+
+  lector.readAsDataURL(archivo);
 });
 
-// Dibujar imagen y marco
-function dibujarImagen() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar canvas
-  if (imagen) {
-    const ancho = imagen.width * scale; // Calcular ancho escalado
-    const alto = imagen.height * scale; // Calcular alto escalado
-    ctx.drawImage(imagen, position.x, position.y, ancho, alto); // Dibujar imagen
-  }
-  ctx.drawImage(marco, 0, 0, canvas.width, canvas.height); // Dibujar marco encima
-}
-
-// Obtener coordenadas según mouse o touch
-function obtenerCoordenadas(e) {
-  if (e.touches) {
-    return { x: e.touches[0].clientX, y: e.touches[0].clientY }; // Coordenadas táctiles
-  }
-  return { x: e.clientX, y: e.clientY }; // Coordenadas de mouse
-}
-
-// Eventos para arrastrar la imagen (PC y móviles)
+// Eventos para mover la imagen con mouse
 canvas.addEventListener("mousedown", (e) => {
-  if (!imagen) return;
-  const coords = obtenerCoordenadas(e);
-  offsetX = coords.x;
-  offsetY = coords.y;
-  isDragging = true;
-});
-
-canvas.addEventListener("touchstart", (e) => {
-  if (!imagen) return;
-  const coords = obtenerCoordenadas(e);
-  offsetX = coords.x;
-  offsetY = coords.y;
-  isDragging = true;
+  arrastrando = true;
+  startX = e.offsetX;
+  startY = e.offsetY;
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (!isDragging || !imagen) return;
-  const coords = obtenerCoordenadas(e);
-  const dx = coords.x - offsetX; // Diferencia X
-  const dy = coords.y - offsetY; // Diferencia Y
-  offsetX = coords.x;
-  offsetY = coords.y;
-  position.x += dx;
-  position.y += dy;
-  dibujarImagen();
+  if (!arrastrando) return;
+  const dx = e.offsetX - startX;
+  const dy = e.offsetY - startY;
+  offsetX += dx * 1.5; // Más rápido
+  offsetY += dy * 1.5;
+  startX = e.offsetX;
+  startY = e.offsetY;
+  dibujar();
+});
+
+canvas.addEventListener("mouseup", () => (arrastrando = false));
+canvas.addEventListener("mouseleave", () => (arrastrando = false));
+
+// Zoom con la rueda del mouse
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const scaleAmount = 0.1;
+  escala += e.deltaY < 0 ? scaleAmount : -scaleAmount;
+  escala = Math.max(0.1, escala);
+  dibujar();
+});
+
+// Soporte táctil para mover y escalar con dedos
+canvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    lastTouchDist = getTouchDistance(e.touches);
+  }
 });
 
 canvas.addEventListener("touchmove", (e) => {
-  if (!isDragging || !imagen) return;
-  const coords = obtenerCoordenadas(e);
-  const dx = coords.x - offsetX;
-  const dy = coords.y - offsetY;
-  offsetX = coords.x;
-  offsetY = coords.y;
-  position.x += dx;
-  position.y += dy;
-  dibujarImagen();
-});
-
-canvas.addEventListener("mouseup", () => isDragging = false);
-canvas.addEventListener("mouseleave", () => isDragging = false);
-canvas.addEventListener("touchend", () => isDragging = false);
-
-// Zoom con mouse o gestos
-canvas.addEventListener("wheel", (e) => {
-  if (!imagen) return;
   e.preventDefault();
-  scale += e.deltaY * -0.001;
-  scale = Math.max(0.1, Math.min(5, scale));
-  dibujarImagen();
-});
-
-// Gestos multitouch para escalar en móviles
-canvas.addEventListener("touchstart", handlePinchStart, { passive: false });
-canvas.addEventListener("touchmove", handlePinchMove, { passive: false });
-
-let initialPinchDistance = null; // Distancia inicial entre dedos
-
-function handlePinchStart(e) {
-  if (e.touches.length === 2) {
-    initialPinchDistance = getPinchDistance(e.touches); // Guardar distancia inicial
+  if (e.touches.length === 1) {
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    offsetX += dx * 1.5;
+    offsetY += dy * 1.5;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dibujar();
+  } else if (e.touches.length === 2) {
+    const dist = getTouchDistance(e.touches);
+    if (lastTouchDist) {
+      const delta = dist - lastTouchDist;
+      escala += delta * 0.005;
+      escala = Math.max(0.1, escala);
+      dibujar();
+    }
+    lastTouchDist = dist;
   }
+});
+
+canvas.addEventListener("touchend", () => {
+  lastTouchDist = null;
+});
+
+// Descarga la imagen como PNG
+document.getElementById("descargar").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.download = "imagen_con_marco.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+});
+
+// Muestra el mensaje flotante durante 5 segundos
+function mostrarMensajeFlotante() {
+  const mensaje = document.getElementById("mensaje-flotante");
+  mensaje.style.display = "block";
+  setTimeout(() => {
+    mensaje.style.display = "none";
+  }, 5000);
 }
 
-function handlePinchMove(e) {
-  if (!imagen || e.touches.length !== 2 || initialPinchDistance === null) return;
-  e.preventDefault();
-  const newDistance = getPinchDistance(e.touches); // Nueva distancia
-  const pinchScale = newDistance / initialPinchDistance; // Escala relativa
-  scale *= pinchScale;
-  scale = Math.max(0.1, Math.min(5, scale));
-  initialPinchDistance = newDistance;
-  dibujarImagen();
-}
-
-function getPinchDistance(touches) {
+// Calcula la distancia entre dos toques
+function getTouchDistance(touches) {
   const dx = touches[0].clientX - touches[1].clientX;
   const dy = touches[0].clientY - touches[1].clientY;
-  return Math.sqrt(dx * dx + dy * dy); // Calcular distancia entre dedos
+  return Math.sqrt(dx * dx + dy * dy);
 }
 
-// Descargar la imagen con marco
-botonDescargar.addEventListener("click", () => {
-  if (!imagen) return;
-  const enlace = document.createElement("a");
-  enlace.download = "imagen-editada.png";
-  enlace.href = canvas.toDataURL("image/png");
-  enlace.click();
+// Dibuja la imagen del usuario y el marco en el canvas
+function dibujar() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Simular contador usando localStorage
-  let descargas = localStorage.getItem("contadorDescargas") || 0;
-  descargas++;
-  localStorage.setItem("contadorDescargas", descargas);
-  contadorDescargas.textContent = descargas;
-});
+  if (fotoUsuario.src && fotoUsuario.complete) {
+    const w = fotoUsuario.width * escala;
+    const h = fotoUsuario.height * escala;
+    ctx.drawImage(fotoUsuario, offsetX, offsetY, w, h);
+  }
+
+  ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
+}
