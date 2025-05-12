@@ -152,3 +152,6 @@ function dibujar() {
     ctx.fillText(nombre, x, y);
   }
 }
+
+document.getElementById("nombre").addEventListener("input", dibujar);
+
