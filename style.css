@@ -1,70 +1,133 @@
+/* Fondo con degradado rojo fuerte a azul */
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
   background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #000080 60%, #0067bc);
-  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   flex-direction: column;
+  color: white;
+}
+
+/* Cabecera con logo y títulos centrados */
+.logo-header {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.logo-img {
+  width: 160px;
+  height: auto;
+  margin-bottom: 3px;
 }
 
 h1 {
-  margin-bottom: 10px;
+  margin: 3px 0;
   font-size: 28px;
-  text-align: center;
 }
 
+h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+/* Contenedor central */
 .container {
   text-align: center;
-  padding: 20px;
   max-width: 100%;
+  padding: 10px;
 }
 
-input[type="file"],
-input#nombre,
-button#downloadBtn {
-  margin-top: 10px;
-  padding: 12px 20px;
-  border-radius: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-input[type="file"] {
-  background: white;
-  color: red;
-  cursor: pointer;
-}
-
-input#nombre {
-  background: white;
-  color: black;
-  text-transform: uppercase;
-  cursor: text;
-}
-
-button#downloadBtn {
-  background: yellow;
-  color: black;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.canvas-container {
-  margin-top: 20px;
-  max-width: 100%;
-  overflow: auto;
-}
-
+/* Canvas donde se edita la imagen */
 canvas {
   border: 5px solid #ccc;
   max-width: 100%;
   height: auto;
   touch-action: none;
+  margin-top: 10px;
+}
+
+/* Estilo del input para subir imagen */
+input[type="file"] {
+  margin-top: 10px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  color: red;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Estilo del input para el nombre */
+input#nombre {
+  margin-top: 10px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  color: black;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: text;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-transform: uppercase;
+}
+
+/* Botón de descarga en amarillo */
+button#descargar {
+  margin-top: 10px;
+  background: yellow;
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: black;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Botón deshabilitado (sin imagen cargada) */
+button#descargar:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+/* Mensaje flotante informativo */
+.mensaje-flotante {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 103, 188, 0.95);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  z-index: 999;
+  animation: aparecer 0.5s ease-out;
+}
+
+/* Animación del mensaje flotante */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
