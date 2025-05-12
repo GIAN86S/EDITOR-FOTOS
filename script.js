@@ -14,6 +14,12 @@ let lastTouchDist = null;
 const inputNombre = document.getElementById("nombre");
 let nombreUsuario = "";
 
+// Input de descarga
+const btnDescargar = document.getElementById("descargar");
+
+// Deshabilitar el botón de descarga inicialmente
+btnDescargar.disabled = true;
+
 // Actualiza el nombre en tiempo real
 inputNombre.addEventListener("input", () => {
   nombreUsuario = inputNombre.value.toUpperCase(); // Forzamos mayúsculas
@@ -33,6 +39,7 @@ input.addEventListener("change", (e) => {
       offsetX = (canvas.width - fotoUsuario.width * escala) / 2;
       offsetY = (canvas.height - fotoUsuario.height * escala) / 2;
       mostrarMensajeFlotante();
+      btnDescargar.disabled = false;  // Activar botón de descarga cuando la imagen se carga
       dibujar();
     };
     fotoUsuario.src = ev.target.result;
@@ -111,6 +118,8 @@ function getTouchDistance(touches) {
 
 // Descargar imagen y redirigir
 document.getElementById("descargar").addEventListener("click", () => {
+  if (!fotoUsuario.src) return;  // Verifica si la imagen está cargada
+
   const link = document.createElement("a");
   link.download = "imagen_con_nombre.png";
   link.href = canvas.toDataURL("image/png");
@@ -128,7 +137,7 @@ function dibujar() {
     ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
   }
 
-  // Dibuja el nombre en la parte inferior sobre la imagen
+  // Dibuja el nombre en la parte inferior sobre la imagen, delante del marco
   if (nombreUsuario.trim() !== "") {
     ctx.font = "bold 80px sans-serif";
     ctx.fillStyle = "white";
