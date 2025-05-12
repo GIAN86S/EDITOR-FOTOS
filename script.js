@@ -118,7 +118,7 @@ document.getElementById("descargar").addEventListener("click", () => {
 
   setTimeout(() => {
     window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
-  }, 1000);
+  }, 5000);
 });
 
 function dibujar() {
