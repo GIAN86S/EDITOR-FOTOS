@@ -97,17 +97,25 @@ canvas.addEventListener("touchmove", (e) => {
 });
 
 document.getElementById("descargar").addEventListener("click", () => {
-  // 1. Inicia la descarga de la imagen
-  const link = document.createElement("a");
-  link.download = "imagen_con_nombre.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+  // 1. Mostrar el mensaje de aviso
+  const mensaje = document.getElementById("mensaje-aviso");
+  mensaje.style.display = "block"; // Muestra el mensaje
 
-  // 2. Redirige al formulario después de 1 segundo para asegurar que la descarga ocurra primero
+  // 2. Ocultar el mensaje después de 2 segundos y redirigir
   setTimeout(() => {
-    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
-  }, 1000); // 1 segundo de retraso
+    // 2.1 Inicia la descarga de la imagen
+    const link = document.createElement("a");
+    link.download = "imagen_con_nombre.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+
+    // 2.2 Redirige al formulario después de la descarga
+    setTimeout(() => {
+      window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
+    }, 500); // 500ms después de iniciar la descarga
+  }, 2000); // Muestra el mensaje durante 2 segundos
 });
+
 
 
 function dibujar() {
