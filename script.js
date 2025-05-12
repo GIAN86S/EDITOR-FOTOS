@@ -1,132 +1,147 @@
-// Referencias a elementos del DOM
-const inputImagen = document.getElementById('imagen');
-const inputNombre = document.getElementById('nombre');
-const descargarBtn = document.getElementById('descargar');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const input = document.getElementById("imagen");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const marco = new Image();
+marco.src = "assets/marco.png";
 
-// Variables de imagen
-let imagenCargada = null;
-let marco = new Image();
-marco.src = 'marco.png';
-
-// Parámetros para mover y escalar imagen
-let posX = 0, posY = 0, escala = 1;
+let fotoUsuario = new Image();
+let offsetX = 0, offsetY = 0, escala = 1;
 let arrastrando = false;
-let offsetX, offsetY;
+let startX, startY;
+let lastTouchDist = null;
 
-// Desactiva el botón de descarga hasta que se cargue una imagen
-descargarBtn.disabled = true;
+// Input del nombre
+const inputNombre = document.getElementById("nombre");
+let nombreUsuario = "";
 
-// Cargar imagen desde input
-inputImagen.addEventListener('change', (e) => {
-  const archivo = e.target.files[0];
-  if (!archivo) return;
-
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    const img = new Image();
-    img.onload = function() {
-      imagenCargada = img;
-      // Centra la imagen
-      escala = Math.min(canvas.width / img.width, canvas.height / img.height);
-      posX = (canvas.width - img.width * escala) / 2;
-      posY = (canvas.height - img.height * escala) / 2;
-      descargarBtn.disabled = false;
-      dibujar();
-    };
-    img.src = evt.target.result;
-  };
-  reader.readAsDataURL(archivo);
-});
-
-// Dibuja todo: imagen, texto, marco
-function dibujar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (imagenCargada) {
-    ctx.drawImage(imagenCargada, posX, posY, imagenCargada.width * escala, imagenCargada.height * escala);
-  }
-
-  // Dibuja el nombre si existe
-  const texto = inputNombre.value.toUpperCase();
-  if (texto) {
-    const padding = 10;
-    ctx.font = 'italic 30px sans-serif';
-    const textWidth = ctx.measureText(texto).width;
-    const boxWidth = textWidth + padding * 2;
-    const boxHeight = 40;
-
-    const x = (canvas.width - boxWidth) / 2;
-    const y = canvas.height - boxHeight - 20;
-
-    // Caja blanca redondeada
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.moveTo(x + 5, y);
-    ctx.lineTo(x + boxWidth - 5, y);
-    ctx.quadraticCurveTo(x + boxWidth, y, x + boxWidth, y + 5);
-    ctx.lineTo(x + boxWidth, y + boxHeight - 5);
-    ctx.quadraticCurveTo(x + boxWidth, y + boxHeight, x + boxWidth - 5, y + boxHeight);
-    ctx.lineTo(x + 5, y + boxHeight);
-    ctx.quadraticCurveTo(x, y + boxHeight, x, y + boxHeight - 5);
-    ctx.lineTo(x, y + 5);
-    ctx.quadraticCurveTo(x, y, x + 5, y);
-    ctx.closePath();
-    ctx.fill();
-
-    // Texto negro encima
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(texto, canvas.width / 2, y + boxHeight / 2);
-  }
-
-  // Dibuja el marco encima de todo
-  ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
-}
-
-// Evento input para nombre (dibuja en tiempo real)
-inputNombre.addEventListener('input', dibujar);
-
-// Movimiento de la imagen
-canvas.addEventListener('mousedown', (e) => {
-  if (!imagenCargada) return;
-  arrastrando = true;
-  offsetX = e.offsetX - posX;
-  offsetY = e.offsetY - posY;
-});
-canvas.addEventListener('mousemove', (e) => {
-  if (arrastrando) {
-    posX = e.offsetX - offsetX;
-    posY = e.offsetY - offsetY;
-    dibujar();
-  }
-});
-canvas.addEventListener('mouseup', () => arrastrando = false);
-canvas.addEventListener('mouseleave', () => arrastrando = false);
-
-// Rueda para hacer zoom
-canvas.addEventListener('wheel', (e) => {
-  if (!imagenCargada) return;
-  e.preventDefault();
-  const zoom = e.deltaY < 0 ? 1.05 : 0.95;
-  escala *= zoom;
+// Actualiza el nombre en tiempo real
+inputNombre.addEventListener("input", () => {
+  nombreUsuario = inputNombre.value.toUpperCase(); // Forzamos mayúsculas
   dibujar();
 });
 
-// Botón de descargar imagen final
-descargarBtn.addEventListener('click', () => {
-  const enlace = document.createElement('a');
-  enlace.download = 'imagen_final.png';
-  enlace.href = canvas.toDataURL();
-  enlace.click();
+// Cargar imagen del usuario
+input.addEventListener("change", (e) => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
+  const lector = new FileReader();
+
+  lector.onload = (ev) => {
+    fotoUsuario = new Image();
+    fotoUsuario.onload = () => {
+      escala = Math.min(canvas.width / fotoUsuario.width, canvas.height / fotoUsuario.height);
+      offsetX = (canvas.width - fotoUsuario.width * escala) / 2;
+      offsetY = (canvas.height - fotoUsuario.height * escala) / 2;
+      mostrarMensajeFlotante();
+      dibujar();
+    };
+    fotoUsuario.src = ev.target.result;
+  };
+
+  lector.readAsDataURL(archivo);
 });
 
-// ✋ Bloquear clic derecho y algunas teclas para evitar capturas
-window.addEventListener('contextmenu', e => e.preventDefault());
-window.addEventListener('keydown', e => {
-  if (['PrintScreen', 'F12', 'Control', 'Shift', 'I'].includes(e.key)) {
-    e.preventDefault();
+// Mover imagen con mouse
+canvas.addEventListener("mousedown", (e) => {
+  arrastrando = true;
+  startX = e.offsetX;
+  startY = e.offsetY;
+});
+
+canvas.addEventListener("mousemove", (e) => {
+  if (!arrastrando) return;
+  const dx = e.offsetX - startX;
+  const dy = e.offsetY - startY;
+  offsetX += dx * 1.5;
+  offsetY += dy * 1.5;
+  startX = e.offsetX;
+  startY = e.offsetY;
+  dibujar();
+});
+
+canvas.addEventListener("mouseup", () => arrastrando = false);
+canvas.addEventListener("mouseleave", () => arrastrando = false);
+
+// Zoom con scroll
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const scaleAmount = 0.1;
+  escala += e.deltaY < 0 ? scaleAmount : -scaleAmount;
+  escala = Math.max(0.1, escala);
+  dibujar();
+});
+
+// Toques táctiles
+canvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    lastTouchDist = getTouchDistance(e.touches);
   }
 });
+
+canvas.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  if (e.touches.length === 1) {
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    offsetX += dx * 1.5;
+    offsetY += dy * 1.5;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dibujar();
+  } else if (e.touches.length === 2) {
+    const dist = getTouchDistance(e.touches);
+    if (lastTouchDist) {
+      const delta = dist - lastTouchDist;
+      escala += delta * 0.005;
+      escala = Math.max(0.1, escala);
+      dibujar();
+    }
+    lastTouchDist = dist;
+  }
+});
+
+function getTouchDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+// Descargar imagen y redirigir
+document.getElementById("descargar").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.download = "imagen_con_nombre.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+
+  setTimeout(() => {
+    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
+  }, 1000);
+});
+
+function dibujar() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (fotoUsuario.src && fotoUsuario.complete) {
+    ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
+  }
+
+  // Dibuja el nombre en la parte inferior sobre la imagen
+  if (nombreUsuario.trim() !== "") {
+    ctx.font = "bold 80px sans-serif";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+    ctx.fillText(nombreUsuario, canvas.width / 2, canvas.height - 60);
+  }
+
+  ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
+}
+
+function mostrarMensajeFlotante() {
+  const mensaje = document.getElementById("mensaje-flotante");
+  mensaje.style.display = "block";
+  setTimeout(() => mensaje.style.display = "none", 3000);
+}
