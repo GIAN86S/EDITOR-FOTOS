@@ -52,7 +52,7 @@ canvas.addEventListener("mousemove", (e) => {
   if (!arrastrando) return;
   const dx = e.offsetX - startX;
   const dy = e.offsetY - startY;
-  offsetX += dx * 1.5;  // Sensibilidad al mover (ajustar el multiplicador)
+  offsetX += dx * 1.5;
   offsetY += dy * 1.5;
   startX = e.offsetX;
   startY = e.offsetY;
@@ -67,7 +67,7 @@ canvas.addEventListener("wheel", (e) => {
   e.preventDefault();
   const scaleAmount = 0.1;
   escala += e.deltaY < 0 ? scaleAmount : -scaleAmount;
-  escala = Math.max(0.1, escala);  // Limitar el zoom
+  escala = Math.max(0.1, escala);
   dibujar();
 });
 
@@ -121,29 +121,62 @@ document.getElementById("descargar").addEventListener("click", () => {
   }, 1000);
 });
 
+// FUNCION PRINCIPAL PARA DIBUJAR TODO
 function dibujar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Dibuja la imagen del usuario, con desplazamiento y escala
+  // 1. Imagen del usuario
   if (fotoUsuario.src && fotoUsuario.complete) {
     ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
   }
 
-  // Dibuja el nombre en la parte inferior sobre la imagen
+  // 2. Texto del nombre con fondo blanco redondeado
   if (nombreUsuario.trim() !== "") {
-    ctx.font = "bold 80px sans-serif";
-    ctx.fillStyle = "white";
+    const text = nombreUsuario;
+    ctx.font = "italic 60px sans-serif";
     ctx.textAlign = "center";
-    ctx.textBaseline = "bottom";
-    ctx.fillText(nombreUsuario, canvas.width / 2, canvas.height - 60);
+    ctx.textBaseline = "middle";
+
+    const textX = canvas.width / 2;
+    const textY = canvas.height - 100;
+
+    const textMetrics = ctx.measureText(text);
+    const padding = 20;
+    const boxWidth = textMetrics.width + padding * 2;
+    const boxHeight = 80;
+
+    // Fondo blanco redondeado
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.roundRect(textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight, 10);
+    ctx.fill();
+
+    // Texto negro encima
+    ctx.fillStyle = "black";
+    ctx.fillText(text, textX, textY);
   }
 
-  // Dibuja el marco sobre la imagen
+  // 3. Marco encima de todo
   ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
 }
 
+// FUNCIÓN PARA MOSTRAR MENSAJE TEMPORAL
 function mostrarMensajeFlotante() {
   const mensaje = document.getElementById("mensaje-flotante");
   mensaje.style.display = "block";
   setTimeout(() => mensaje.style.display = "none", 3000);
+}
+
+// EXTENSIÓN para redondear bordes de rectángulo (fondo del texto)
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+  if (w < 2 * r) r = w / 2;
+  if (h < 2 * r) r = h / 2;
+  this.beginPath();
+  this.moveTo(x + r, y);
+  this.arcTo(x + w, y, x + w, y + h, r);
+  this.arcTo(x + w, y + h, x, y + h, r);
+  this.arcTo(x, y + h, x, y, r);
+  this.arcTo(x, y, x + w, y, r);
+  this.closePath();
+  return this;
 }
