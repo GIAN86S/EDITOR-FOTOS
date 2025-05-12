@@ -38,19 +38,25 @@ document.getElementById("imagen").addEventListener("change", (e) => {
   }
 });
 
-// Dibuja el contenido del canvas
 function dibujar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Imagen del usuario
   if (fotoUsuario.src && fotoUsuario.complete) {
-    ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
+    ctx.drawImage(
+      fotoUsuario,
+      offsetX,
+      offsetY,
+      fotoUsuario.width * escala,
+      fotoUsuario.height * escala
+    );
   }
 
-  if (marcoCargado) {
-    ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
-  }
+  // Marco encima de la imagen
+  ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
 
-  const nombre = document.getElementById("nombre").value.toUpperCase();
+  // Texto del nombre
+  const nombre = document.getElementById("nombre").value.toUpperCase(); // Forza mayúsculas
   if (nombre) {
     ctx.font = "italic 60px sans-serif";
     ctx.textAlign = "center";
@@ -60,12 +66,21 @@ function dibujar() {
     const padding = 40;
     const boxHeight = 80;
     const x = canvas.width / 2;
-    const y = canvas.height - 100;
+    const y = canvas.height - 150; // Subido 50px más arriba
 
+    // Fondo blanco con esquinas redondeadas
     ctx.fillStyle = "white";
-    roundRect(ctx, x - textWidth / 2 - padding / 2, y - boxHeight / 2, textWidth + padding, boxHeight, 5);
+    roundRect(
+      ctx,
+      x - textWidth / 2 - padding / 2,
+      y - boxHeight / 2,
+      textWidth + padding,
+      boxHeight,
+      10 // Más redondeado
+    );
     ctx.fill();
 
+    // Texto encima
     ctx.fillStyle = "black";
     ctx.fillText(nombre, x, y);
   }
@@ -85,6 +100,7 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
 }
+
 
 // Descargar imagen
 document.getElementById("descargar").addEventListener("click", () => {
