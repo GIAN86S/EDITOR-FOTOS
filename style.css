@@ -135,11 +135,11 @@ button#descargar {
   background-color: #4CAF50; /* Verde para el botón OK */
   color: white; /* Texto blanco */
   border: none; /* Sin borde */
-  padding: 10px 20px; /* Espaciado del botón */
+  padding: 20px 30px; /* Espaciado del botón */
   text-align: center; /* Centrado del texto */
   text-decoration: none; /* Elimina subrayado */
   display: inline-block; /* Hace que el botón sea inline */
-  font-size: 16px; /* Tamaño de la fuente */
+  font-size: 25px; /* Tamaño de la fuente */
   cursor: pointer; /* Cambia el cursor cuando pasa sobre el botón */
   border-radius: 5px; /* Bordes redondeados */
 }
