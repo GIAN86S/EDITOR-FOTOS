@@ -19,6 +19,7 @@ marco.onload = () => {
   dibujar();
 };
 
+// Subir imagen
 document.getElementById("imagen").addEventListener("change", (e) => {
   const archivo = e.target.files[0];
   if (archivo) {
@@ -56,10 +57,9 @@ function dibujar() {
   ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
 
   // Texto del nombre
-  const nombre = document.getElementById("nombre").value.toUpperCase(); // Forza mayúsculas
+  const nombre = document.getElementById("nombre").value.toUpperCase();
   if (nombre) {
-    // Aumentamos el tamaño de la fuente en 5px y lo hacemos más grueso
-    ctx.font = "bold italic 75px sans-serif"; // 5px más grande y en negrita
+    ctx.font = "bold italic 75px sans-serif"; // Aumenta el tamaño y hace el texto más grueso
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
@@ -67,7 +67,7 @@ function dibujar() {
     const padding = 40;
     const boxHeight = 80;
     const x = canvas.width / 2;
-    const y = canvas.height - 700; // Subido 50px más arriba
+    const y = canvas.height - 700;
 
     // Fondo blanco con esquinas redondeadas
     ctx.fillStyle = "white";
@@ -77,7 +77,7 @@ function dibujar() {
       y - boxHeight / 2,
       textWidth + padding,
       boxHeight,
-      10 // Más redondeado
+      10
     );
     ctx.fill();
 
@@ -87,7 +87,7 @@ function dibujar() {
   }
 }
 
-// Dibujar bordes redondeados
+// Función para dibujar bordes redondeados
 function roundRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -101,7 +101,6 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
 }
-
 
 // Descargar imagen
 document.getElementById("descargar").addEventListener("click", () => {
@@ -118,7 +117,7 @@ document.getElementById("descargar").addEventListener("click", () => {
   }
 });
 
-// Mostrar mensaje informativo flotante
+// Mostrar mensaje flotante
 function mostrarMensaje(texto) {
   const mensaje = document.getElementById("mensaje-flotante");
   mensaje.textContent = texto;
@@ -128,11 +127,14 @@ function mostrarMensaje(texto) {
   }, 3000);
 }
 
-// Eventos para mover imagen
+// Eventos para mover la imagen
 canvas.addEventListener("mousedown", (e) => {
-  arrastrando = true;
-  inicioX = e.offsetX;
-  inicioY = e.offsetY;
+  if (e.offsetX > offsetX && e.offsetX < offsetX + fotoUsuario.width * escala &&
+      e.offsetY > offsetY && e.offsetY < offsetY + fotoUsuario.height * escala) {
+    arrastrando = true;
+    inicioX = e.offsetX - offsetX;
+    inicioY = e.offsetY - offsetY;
+  }
 });
 
 canvas.addEventListener("mouseup", () => {
@@ -141,14 +143,13 @@ canvas.addEventListener("mouseup", () => {
 
 canvas.addEventListener("mousemove", (e) => {
   if (arrastrando) {
-    offsetX += e.offsetX - inicioX;
-    offsetY += e.offsetY - inicioY;
-    inicioX = e.offsetX;
-    inicioY = e.offsetY;
+    offsetX = e.offsetX - inicioX;
+    offsetY = e.offsetY - inicioY;
     dibujar();
   }
 });
 
+// Evento de zoom con la rueda del ratón
 canvas.addEventListener("wheel", (e) => {
   e.preventDefault();
   escala += e.deltaY < 0 ? 0.05 : -0.05;
@@ -156,5 +157,5 @@ canvas.addEventListener("wheel", (e) => {
   dibujar();
 });
 
-// Actualiza el canvas al cambiar el texto
+// Actualizar canvas al cambiar el nombre
 document.getElementById("nombre").addEventListener("input", dibujar);
