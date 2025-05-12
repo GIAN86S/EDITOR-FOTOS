@@ -29,41 +29,32 @@ function drawCanvas() {
     ctx.drawImage(image, imageX, imageY, iw, ih);
   }
 
-function dibujar() {
-  // Limpiar el canvas antes de redibujar
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Dibujar el texto del nombre
+  const name = nameInput.value.toUpperCase();
+  if (name) {
+    ctx.font = 'italic 60px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'white';
+    const textWidth = ctx.measureText(name).width;
+    const textX = canvas.width / 2;
+    const textY = canvas.height - 80;
 
-  // 1. Dibujar la imagen cargada (puede moverse y escalarse)
-  if (fotoUsuario.src && fotoUsuario.complete) {
-    ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
-  }
-
-  // 2. Dibujar el marco encima de la imagen
-  if (marco.complete) {
-    ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
-  }
-
-  // 3. Dibujar el texto del nombre por ENCIMA del marco
-  if (nombreUsuario.trim() !== "") {
-    ctx.font = "italic 60px sans-serif"; // Establece la fuente como itálica
-    ctx.textAlign = "center"; // Alinea el texto al centro
-
-    const textWidth = ctx.measureText(nombreUsuario).width; // Calcula el ancho del texto
-    const textX = canvas.width / 2; // Centra el texto en el canvas
-    const textY = canvas.height - 80; // Coloca el texto cerca de la parte inferior
-
-    // Fondo del texto con bordes redondeados
+    // Fondo del texto
     ctx.fillStyle = 'white';
     ctx.beginPath();
-    ctx.roundRect(textX - textWidth / 2 - 20, textY - 60, textWidth + 40, 70, 5); // Fondo redondeado
+    ctx.roundRect(textX - textWidth / 2 - 20, textY - 60, textWidth + 40, 70, 5);
     ctx.fill();
 
-    // Texto negro encima del fondo blanco
+    // Texto
     ctx.fillStyle = 'black';
-    ctx.fillText(nombreUsuario, textX, textY - 10); // Dibuja el texto
+    ctx.fillText(name, textX, textY - 10);
+  }
+
+  // Dibujar el marco encima
+  if (frame.complete) {
+    ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
   }
 }
-
 
 // Soporte para esquinas redondeadas (custom)
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, radius) {
