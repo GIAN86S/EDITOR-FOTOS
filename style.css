@@ -1,14 +1,5 @@
+/* Fondo con degradado de rojo fuerte a claro (arriba) y azul fuerte a claro (abajo) */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #000080 60%, #0067bc);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  flex-direction: column;
-  color: white;
   margin: 0; /* Elimina los márgenes predeterminados del cuerpo */
   padding: 0; /* Elimina el relleno interno */
   font-family: sans-serif; /* Usa una fuente sin serifa para el texto */
@@ -23,17 +14,12 @@ body {
 
 /* Cabecera con el logo y títulos */
 .logo-header {
-  text-align: center;
-  margin-top: 20px;
   text-align: center; /* Alinea el contenido al centro */
   margin-top: 15px; /* Agrega espacio en la parte superior */
 }
 
 /* Tamaño del logo (más grande) */
 .logo-img {
-  width: 160px;
-  height: auto;
-  margin-bottom: 10px;
   width: 160px; /* Establece el ancho de la imagen del logo */
   height: auto; /* Permite que la altura se ajuste automáticamente */
   margin-bottom: 3px; /* Agrega espacio debajo de la imagen */
@@ -41,16 +27,11 @@ body {
 
 /* Estilos de los títulos */
 h1 {
-  margin: 5px 0;
-  font-size: 28px;
   margin: 3px 0; /* Ajusta los márgenes superior e inferior */
   font-size: 28px; /* Tamaño de fuente grande */
 }
 
 h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: normal;
   margin: 0; /* Elimina los márgenes */
   font-size: 15px; /* Tamaño de fuente más pequeño */
   font-weight: normal; /* Define el peso de la fuente como normal */
@@ -58,9 +39,6 @@ h2 {
 
 /* Contenedor de los elementos */
 .container {
-  text-align: center;
-  max-width: 100%;
-  padding: 10px;
   text-align: center; /* Alinea los elementos al centro */
   max-width: 100%; /* Limita el ancho máximo al 100% */
   padding: 10px; /* Agrega espacio interno alrededor del contenido */
@@ -68,11 +46,6 @@ h2 {
 
 /* Canvas (zona donde se edita la imagen) */
 canvas {
-  border: 1px solid #ccc;
-  max-width: 100%;
-  height: auto;
-  touch-action: none;
-  margin-top: 20px;
   border: 5px solid #ccc; /* Agrega un borde gris claro alrededor del canvas */
   max-width: 100%; /* Limita el ancho máximo */
   height: auto; /* Permite que la altura se ajuste automáticamente */
@@ -82,17 +55,6 @@ canvas {
 
 /* Estilos para botones e input de archivo */
 input[type="file"] {
-  margin-top: 15px;
-  background: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
   margin-top: 10px; /* Agrega espacio en la parte superior */
   background: white; /* Establece el fondo blanco */
   padding: 12px 20px; /* Agrega relleno interno */
@@ -106,19 +68,25 @@ input[type="file"] {
   margin-right: auto; /* Centra horizontalmente */
 }
 
-/* Botón de descarga con fondo amarillo */
-button#descargar {
+/* Estilo para el input del nombre */
+input#nombre {
   margin-top: 10px;
-  background: yellow;
+  background: white;
   padding: 12px 20px;
-  border-radius: 8px;
+  border-radius: 5px;
   color: black;
   font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
+  cursor: text;
+  font-size: 13px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  text-transform: uppercase; /* Siempre mayúsculas */
+}
+
+
+/* Botón de descarga con fondo amarillo */
+button#descargar {
   margin-top: 10px; /* Agrega espacio en la parte superior */
   background: yellow; /* Establece el fondo amarillo */
   padding: 12px 20px; /* Agrega relleno interno */
@@ -134,18 +102,6 @@ button#descargar {
 
 /* Burbuja flotante informativa */
 .mensaje-flotante {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 103, 188, 0.95);
-  color: white;
-  padding: 14px 24px;
-  border-radius: 10px;
-  font-size: 16px;
-  z-index: 999;
-  animation: aparecer 0.5s ease-out;
   display: none; /* Oculta el mensaje por defecto */
   position: fixed; /* Mantiene el mensaje fijo en la pantalla */
   bottom: 20px; /* Ubica el mensaje en la parte inferior */
@@ -163,14 +119,10 @@ button#descargar {
 /* Animación de entrada del mensaje */
 @keyframes aparecer {
   from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
     opacity: 0; /* Empieza con opacidad cero (invisible) */
     transform: translateX(-50%) translateY(20px); /* Inicia desplazado hacia abajo */
   }
   to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
     opacity: 1; /* Aparece completamente */
     transform: translateX(-50%) translateY(0); /* Se posiciona correctamente */
   }
