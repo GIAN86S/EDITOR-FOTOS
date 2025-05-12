@@ -16,15 +16,13 @@
 
   <div class="container">
     <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
-    <input type="text" id="nombre" placeholder="ESCRIBE TU NOMBRE COMPLETO" style="text-transform: uppercase;" />
-    <button id="descargar">Descargar Imagen</button>
-    <canvas id="canvas" width="1920" height="1920"></canvas>
+    
+    <!-- Input de nombre (visible pero no debajo del canvas) -->
+    <input type="text" id="nombre" placeholder="Escribe tu nombre completo" />
 
-    <!-- Mensaje de aviso flotante con botón OK -->
-    <div id="mensaje-aviso" class="mensaje-aviso">
-      Te vamos a redirigir a un formulario de Google para terminar el proceso.
-      <button id="confirmar-ok">OK</button> <!-- Botón para confirmar -->
-    </div>
+    <button id="descargar">Descargar Imagen</button>
+
+    <canvas id="canvas" width="1920" height="1920"></canvas>
 
     <div id="mensaje-flotante" class="mensaje-flotante">
       Imagen subida. Puedes mover y acomodar la imagen.
