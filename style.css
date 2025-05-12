@@ -1,182 +1,179 @@
-/* Fondo con degradado de rojo fuerte a claro (arriba) y azul fuerte a claro (abajo) */
-body {
-  margin: 0; /* Elimina los márgenes predeterminados del cuerpo */
-  padding: 0; /* Elimina el relleno interno */
-  font-family: sans-serif; /* Usa una fuente sin serifa para el texto */
-  background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #000080 60%, #0067bc); /* Aplica un fondo degradado de rojo a azul */
-  display: flex; /* Usa flexbox para centrar los elementos */
-  justify-content: center; /* Centra los elementos horizontalmente */
-  align-items: center; /* Centra los elementos verticalmente */
-  min-height: 100vh; /* Garantiza que el contenido ocupe al menos la altura completa de la ventana */
-  flex-direction: column; /* Organiza los elementos en columna */
-  color: white; /* Establece el color del texto como blanco */
-}
+const input = document.getElementById("imagen");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const marco = new Image();
+marco.src = "assets/marco.png";
 
-/* Cabecera con el logo y títulos */
-.logo-header {
-  text-align: center; /* Alinea el contenido al centro */
-  margin-top: 15px; /* Agrega espacio en la parte superior */
-}
+let fotoUsuario = null;
+let offsetX = 0, offsetY = 0, escala = 1;
+let arrastrando = false;
+let startX, startY;
+let lastTouchDist = null;
 
-/* Tamaño del logo (más grande) */
-.logo-img {
-  width: 160px; /* Establece el ancho de la imagen del logo */
-  height: auto; /* Permite que la altura se ajuste automáticamente */
-  margin-bottom: 3px; /* Agrega espacio debajo de la imagen */
-}
+// Nombre del usuario
+const inputNombre = document.getElementById("nombre");
+let nombreUsuario = "";
 
-/* Estilos de los títulos */
-h1 {
-  margin: 3px 0; /* Ajusta los márgenes superior e inferior */
-  font-size: 28px; /* Tamaño de fuente grande */
-}
+inputNombre.addEventListener("input", () => {
+  nombreUsuario = inputNombre.value.toUpperCase();
+  dibujar();
+});
 
-h2 {
-  margin: 0; /* Elimina los márgenes */
-  font-size: 15px; /* Tamaño de fuente más pequeño */
-  font-weight: normal; /* Define el peso de la fuente como normal */
-}
+// Cargar imagen
+input.addEventListener("change", (e) => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
 
-/* Contenedor de los elementos */
-.container {
-  text-align: center; /* Alinea los elementos al centro */
-  max-width: 100%; /* Limita el ancho máximo al 100% */
-  padding: 10px; /* Agrega espacio interno alrededor del contenido */
-}
+  const lector = new FileReader();
+  lector.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      fotoUsuario = img;
+      escala = Math.min(canvas.width / img.width, canvas.height / img.height);
+      offsetX = (canvas.width - img.width * escala) / 2;
+      offsetY = (canvas.height - img.height * escala) / 2;
+      mostrarMensajeFlotante();
+      dibujar();
+    };
+    img.src = ev.target.result;
+  };
+  lector.readAsDataURL(archivo);
+});
 
-/* Canvas (zona donde se edita la imagen) */
-canvas {
-  border: 5px solid #ccc; /* Agrega un borde gris claro alrededor del canvas */
-  max-width: 100%; /* Limita el ancho máximo */
-  height: auto; /* Permite que la altura se ajuste automáticamente */
-  touch-action: none; /* Desactiva la acción táctil predeterminada */
-  margin-top: 10px; /* Agrega espacio en la parte superior */
-}
+// Mover imagen con mouse
+canvas.addEventListener("mousedown", (e) => {
+  arrastrando = true;
+  startX = e.offsetX;
+  startY = e.offsetY;
+});
+canvas.addEventListener("mousemove", (e) => {
+  if (!arrastrando) return;
+  const dx = e.offsetX - startX;
+  const dy = e.offsetY - startY;
+  offsetX += dx * 1.5;
+  offsetY += dy * 1.5;
+  startX = e.offsetX;
+  startY = e.offsetY;
+  dibujar();
+});
+canvas.addEventListener("mouseup", () => arrastrando = false);
+canvas.addEventListener("mouseleave", () => arrastrando = false);
 
-/* Estilos para botones e input de archivo */
-input[type="file"] {
-  margin-top: 10px; /* Agrega espacio en la parte superior */
-  background: white; /* Establece el fondo blanco */
-  padding: 12px 20px; /* Agrega relleno interno */
-  border-radius: 5px; /* Redondea los bordes */
-  color: red; /* Establece el color del texto en negro */
-  font-weight: bold; /* Hace que el texto sea negrita */
-  cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
-  font-size: 13px; /* Establece el tamaño de la fuente */
-  display: block; /* Hace que el input se comporte como un bloque */
-  margin-left: auto; /* Centra horizontalmente */
-  margin-right: auto; /* Centra horizontalmente */
-}
+// Zoom con rueda
+canvas.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const scaleAmount = 0.1;
+  escala += e.deltaY < 0 ? scaleAmount : -scaleAmount;
+  escala = Math.max(0.1, escala);
+  dibujar();
+});
 
-/* Botón de descarga con fondo amarillo */
-button#descargar {
-  margin-top: 10px; /* Agrega espacio en la parte superior */
-  background: yellow; /* Establece el fondo amarillo */
-  padding: 12px 20px; /* Agrega relleno interno */
-  border-radius: 8px; /* Redondea los bordes */
-  color: black; /* Establece el color del texto en negro */
-  font-weight: bold; /* Hace que el texto sea negrita */
-  cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
-  font-size: 13px; /* Establece el tamaño de la fuente */
-  display: block; /* Hace que el botón se comporte como un bloque */
-  margin-left: auto; /* Centra horizontalmente */
-  margin-right: auto; /* Centra horizontalmente */
-}
-
-/* Burbuja flotante informativa */
-.mensaje-flotante {
-  display: none; /* Oculta el mensaje por defecto */
-  position: fixed; /* Mantiene el mensaje fijo en la pantalla */
-  bottom: 20px; /* Ubica el mensaje en la parte inferior */
-  left: 50%; /* Centra el mensaje horizontalmente */
-  transform: translateX(-50%); /* Ajusta su posición para estar bien centrado */
-  background: rgba(0, 103, 188, 0.95); /* Establece un fondo azul semi-transparente */
-  color: white; /* Establece el color del texto en blanco */
-  padding: 14px 24px; /* Agrega espacio interno */
-  border-radius: 10px; /* Redondea los bordes */
-  font-size: 16px; /* Establece el tamaño de la fuente */
-  z-index: 999; /* Asegura que el mensaje aparezca sobre otros elementos */
-  animation: aparecer 0.5s ease-out; /* Aplica una animación de aparición */
-}
-
-/* Animación de entrada del mensaje */
-@keyframes aparecer {
-  from {
-    opacity: 0; /* Empieza con opacidad cero (invisible) */
-    transform: translateX(-50%) translateY(20px); /* Inicia desplazado hacia abajo */
+// Zoom y mover con tacto
+canvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    lastTouchDist = getTouchDistance(e.touches);
   }
-  to {
-    opacity: 1; /* Aparece completamente */
-    transform: translateX(-50%) translateY(0); /* Se posiciona correctamente */
+});
+
+canvas.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  if (e.touches.length === 1) {
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    offsetX += dx * 1.5;
+    offsetY += dy * 1.5;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dibujar();
+  } else if (e.touches.length === 2) {
+    const dist = getTouchDistance(e.touches);
+    if (lastTouchDist) {
+      const delta = dist - lastTouchDist;
+      escala += delta * 0.005;
+      escala = Math.max(0.1, escala);
+      dibujar();
+    }
+    lastTouchDist = dist;
+  }
+});
+
+function getTouchDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+// Botón de descarga
+document.getElementById("descargar").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.download = "imagen_con_nombre.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+
+  setTimeout(() => {
+    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
+  }, 1000);
+});
+
+// Dibujar todo
+function dibujar() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Imagen del usuario
+  if (fotoUsuario) {
+    ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
+  }
+
+  // Texto con fondo blanco redondeado
+  if (nombreUsuario.trim() !== "") {
+    const text = nombreUsuario;
+    ctx.font = "italic 60px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const textX = canvas.width / 2;
+    const textY = canvas.height - 100;
+
+    const textMetrics = ctx.measureText(text);
+    const padding = 20;
+    const boxWidth = textMetrics.width + padding * 2;
+    const boxHeight = 80;
+
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.roundRect(textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight, 10);
+    ctx.fill();
+
+    ctx.fillStyle = "black";
+    ctx.fillText(text, textX, textY);
+  }
+
+  // Marco encima
+  if (marco.complete) {
+    ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
   }
 }
-/*--------------------------------------------------------------*/
 
-
-
-/* Mensaje de aviso centrado y con animación de pulso */
-.mensaje-aviso {
-  display: none; /* Oculto por defecto */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Centrado exacto */
-  background: rgba(0, 103, 188, 0.95); /* Azul semi-transparente */
-  color: white;
-  padding: 30px 40px;
-  border-radius: 15px;
-  font-size: 20px;
-  text-align: center;
-  z-index: 9999;
-  animation: pulso 1.2s infinite ease-in-out; /* Animación de pulso */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+// Mensaje flotante
+function mostrarMensajeFlotante() {
+  const mensaje = document.getElementById("mensaje-flotante");
+  mensaje.style.display = "block";
+  setTimeout(() => mensaje.style.display = "none", 3000);
 }
 
-/* Animación de pulso */
-@keyframes pulso {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.05);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-/* Botón OK más grande y llamativo */
-.mensaje-aviso button {
-  margin-top: 15px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 16px 32px;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-}
-
-.mensaje-aviso button:hover {
-  background-color: #45a049;
-}
-
-input#nombre {
-  margin-top: 10px;
-  padding: 12px 20px;
-  border-radius: 5px;
-  font-weight: bold;
-  font-style: italic;
-  font-size: 16px;
-  text-align: center;
-  color: black;
-  background: white;
-  border: none;
-  text-transform: uppercase;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
+// Método para redondear rectángulo
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+  if (w < 2 * r) r = w / 2;
+  if (h < 2 * r) r = h / 2;
+  this.beginPath();
+  this.moveTo(x + r, y);
+  this.arcTo(x + w, y, x + w, y + h, r);
+  this.arcTo(x + w, y + h, x, y + h, r);
+  this.arcTo(x, y + h, x, y, r);
+  this.arcTo(x, y, x + w, y, r);
+  this.closePath();
+  return this;
+};
