@@ -66,7 +66,7 @@ function dibujar() {
     const padding = 40;
     const boxHeight = 80;
     const x = canvas.width / 2;
-    const y = canvas.height - 150; // Subido 50px más arriba
+    const y = canvas.height - 800; // Subido 50px más arriba
 
     // Fondo blanco con esquinas redondeadas
     ctx.fillStyle = "white";
