@@ -120,6 +120,9 @@ button#descargar {
 
 
 
+canvas {
+  pointer-events: none; /* Desactiva las interacciones directas */
+}
 
 
 
