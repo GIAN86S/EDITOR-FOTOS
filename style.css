@@ -162,3 +162,21 @@ button#descargar {
 .mensaje-aviso button:hover {
   background-color: #45a049;
 }
+
+input#nombre {
+  margin-top: 10px;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 16px;
+  text-align: center;
+  color: black;
+  background: white;
+  border: none;
+  text-transform: uppercase;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
