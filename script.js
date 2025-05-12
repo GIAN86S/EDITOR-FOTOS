@@ -122,8 +122,9 @@ document.getElementById("descargar").addEventListener("click", () => {
 });
 
 function dibujar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
 
+  // Dibuja la imagen del usuario, con desplazamiento y escala
   if (fotoUsuario.src && fotoUsuario.complete) {
     ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
   }
@@ -137,6 +138,7 @@ function dibujar() {
     ctx.fillText(nombreUsuario, canvas.width / 2, canvas.height - 60);
   }
 
+  // Dibuja el marco sobre la imagen
   ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
 }
 
