@@ -120,8 +120,50 @@ document.getElementById("descargar").addEventListener("click", () => {
 
 function dibujar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Dibuja la imagen del usuario
   if (fotoUsuario.src && fotoUsuario.complete) {
     ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
   }
+
+  // Dibuja el marco
   ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
+
+  // Dibuja el texto (nombre)
+  const nombre = document.getElementById("nombre").value.toUpperCase(); // Asegura mayúsculas
+  if (nombre) {
+    ctx.font = "italic 60px sans-serif"; // Cursiva y tamaño
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const textWidth = ctx.measureText(nombre).width;
+    const padding = 40;
+    const boxHeight = 80;
+    const x = canvas.width / 2;
+    const y = canvas.height - 100;
+
+    // Fondo blanco con bordes redondeados
+    ctx.fillStyle = "white";
+    roundRect(ctx, x - textWidth / 2 - padding / 2, y - boxHeight / 2, textWidth + padding, boxHeight, 5);
+    ctx.fill();
+
+    // Texto negro encima
+    ctx.fillStyle = "black";
+    ctx.fillText(nombre, x, y);
+  }
+}
+
+// Función para dibujar un rectángulo con esquinas redondeadas
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
 }
