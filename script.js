@@ -121,62 +121,27 @@ document.getElementById("descargar").addEventListener("click", () => {
   }, 1000);
 });
 
-// FUNCION PRINCIPAL PARA DIBUJAR TODO
 function dibujar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 1. Imagen del usuario
   if (fotoUsuario.src && fotoUsuario.complete) {
     ctx.drawImage(fotoUsuario, offsetX, offsetY, fotoUsuario.width * escala, fotoUsuario.height * escala);
   }
 
-  // 2. Texto del nombre con fondo blanco redondeado
+  // Dibuja el nombre en la parte inferior sobre la imagen
   if (nombreUsuario.trim() !== "") {
-    const text = nombreUsuario;
-    ctx.font = "italic 60px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    const textX = canvas.width / 2;
-    const textY = canvas.height - 100;
-
-    const textMetrics = ctx.measureText(text);
-    const padding = 20;
-    const boxWidth = textMetrics.width + padding * 2;
-    const boxHeight = 80;
-
-    // Fondo blanco redondeado
+    ctx.font = "bold 80px sans-serif";
     ctx.fillStyle = "white";
-    ctx.beginPath();
-    ctx.roundRect(textX - boxWidth / 2, textY - boxHeight / 2, boxWidth, boxHeight, 10);
-    ctx.fill();
-
-    // Texto negro encima
-    ctx.fillStyle = "black";
-    ctx.fillText(text, textX, textY);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+    ctx.fillText(nombreUsuario, canvas.width / 2, canvas.height - 60);
   }
 
-  // 3. Marco encima de todo
   ctx.drawImage(marco, 0, 0, canvas.width, canvas.height);
 }
 
-// FUNCIÓN PARA MOSTRAR MENSAJE TEMPORAL
 function mostrarMensajeFlotante() {
   const mensaje = document.getElementById("mensaje-flotante");
   mensaje.style.display = "block";
   setTimeout(() => mensaje.style.display = "none", 3000);
-}
-
-// EXTENSIÓN para redondear bordes de rectángulo (fondo del texto)
-CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-  if (w < 2 * r) r = w / 2;
-  if (h < 2 * r) r = h / 2;
-  this.beginPath();
-  this.moveTo(x + r, y);
-  this.arcTo(x + w, y, x + w, y + h, r);
-  this.arcTo(x + w, y + h, x, y + h, r);
-  this.arcTo(x, y + h, x, y, r);
-  this.arcTo(x, y, x + w, y, r);
-  this.closePath();
-  return this;
 }
