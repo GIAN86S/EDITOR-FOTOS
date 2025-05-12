@@ -58,7 +58,8 @@ function dibujar() {
   // Texto del nombre
   const nombre = document.getElementById("nombre").value.toUpperCase(); // Forza mayúsculas
   if (nombre) {
-    ctx.font = "italic 60px sans-serif";
+    // Aumentamos el tamaño de la fuente en 5px y lo hacemos más grueso
+    ctx.font = "bold italic 65px sans-serif"; // 5px más grande y en negrita
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
