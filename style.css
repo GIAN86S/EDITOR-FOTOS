@@ -68,23 +68,6 @@ input[type="file"] {
   margin-right: auto; /* Centra horizontalmente */
 }
 
-/* Estilo para el input del nombre */
-input#nombre {
-  margin-top: 10px;
-  background: white;
-  padding: 12px 20px;
-  border-radius: 5px;
-  color: black;
-  font-weight: bold;
-  cursor: text;
-  font-size: 13px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  text-transform: uppercase; /* Siempre mayúsculas */
-}
-
-
 /* Botón de descarga con fondo amarillo */
 button#descargar {
   margin-top: 10px; /* Agrega espacio en la parte superior */
