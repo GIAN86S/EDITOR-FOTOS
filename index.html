@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <header class="logo-header">
     <img src="assets/logo.png" alt="Logo" class="logo-img" />
     <h1>SOY CONGRESISTA USFX</h1>
@@ -16,14 +15,9 @@
 
   <div class="container">
     <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
-    
-    <!-- Input de nombre (visible pero no debajo del canvas) -->
     <input type="text" id="nombre" placeholder="Escribe tu nombre completo" />
-
-    <button id="descargar">Descargar Imagen</button>
-
+    <button id="descargar" disabled>Descargar Imagen</button>
     <canvas id="canvas" width="1920" height="1920"></canvas>
-
     <div id="mensaje-flotante" class="mensaje-flotante">
       Imagen subida. Puedes mover y acomodar la imagen.
     </div>
