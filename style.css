@@ -110,53 +110,55 @@ button#descargar {
     transform: translateX(-50%) translateY(0); /* Se posiciona correctamente */
   }
 }
+/*--------------------------------------------------------------*/
 
-/* Mensaje de aviso que aparece antes de redirigir */
+
+
+/* Mensaje de aviso centrado y con animación de pulso */
 .mensaje-aviso {
-  display: none; /* Ocultarlo por defecto */
-  position: fixed; /* Mantenerlo fijo en la pantalla */
-  top: 20px; /* Distancia desde la parte superior */
-  left: 50%; /* Centrado horizontalmente */
-  transform: translateX(-50%); /* Centrado exacto */
-  background: rgba(0, 103, 188, 0.95); /* Fondo azul semi-transparente */
-  color: white; /* Texto blanco */
-  padding: 14px 24px; /* Relleno */
-  border-radius: 10px; /* Bordes redondeados */
-  font-size: 18px; /* Tamaño de la fuente */
-  z-index: 999; /* Asegura que se muestre por encima de otros elementos */
-  animation: aparecer 0.5s ease-out; /* Animación para aparecer */
-  display: flex; /* Usamos flexbox para organizar los elementos */
-  justify-content: center; /* Centra el contenido */
-  align-items: center; /* Centra verticalmente */
-  gap: 10px; /* Espacio entre el texto y el botón */
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centrado exacto */
+  background: rgba(0, 103, 188, 0.95); /* Azul semi-transparente */
+  color: white;
+  padding: 30px 40px;
+  border-radius: 15px;
+  font-size: 20px;
+  text-align: center;
+  z-index: 9999;
+  animation: pulso 1.2s infinite ease-in-out; /* Animación de pulso */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Animación de pulso */
+@keyframes pulso {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Botón OK más grande y llamativo */
 .mensaje-aviso button {
-  background-color: #4CAF50; /* Verde para el botón OK */
-  color: white; /* Texto blanco */
-  border: none; /* Sin borde */
-  padding: 20px 30px; /* Espaciado del botón */
-  text-align: center; /* Centrado del texto */
-  text-decoration: none; /* Elimina subrayado */
-  display: inline-block; /* Hace que el botón sea inline */
-  font-size: 25px; /* Tamaño de la fuente */
-  cursor: pointer; /* Cambia el cursor cuando pasa sobre el botón */
-  border-radius: 5px; /* Bordes redondeados */
+  margin-top: 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .mensaje-aviso button:hover {
-  background-color: #45a049; /* Verde más oscuro cuando se pasa el mouse */
+  background-color: #45a049;
 }
-
-/* Animación de aparición del mensaje */
-@keyframes aparecer {
-  from {
-    opacity: 0; /* Empieza invisible */
-    transform: translateX(-50%) translateY(20px); /* Inicia desplazado */
-  }
-  to {
-    opacity: 1; /* Se vuelve visible */
-    transform: translateX(-50%) translateY(0); /* Se coloca en su posición final */
-  }
-}
-
