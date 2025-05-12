@@ -125,6 +125,27 @@ button#descargar {
   font-size: 18px; /* Tamaño de la fuente */
   z-index: 999; /* Asegura que se muestre por encima de otros elementos */
   animation: aparecer 0.5s ease-out; /* Animación para aparecer */
+  display: flex; /* Usamos flexbox para organizar los elementos */
+  justify-content: center; /* Centra el contenido */
+  align-items: center; /* Centra verticalmente */
+  gap: 10px; /* Espacio entre el texto y el botón */
+}
+
+.mensaje-aviso button {
+  background-color: #4CAF50; /* Verde para el botón OK */
+  color: white; /* Texto blanco */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado del botón */
+  text-align: center; /* Centrado del texto */
+  text-decoration: none; /* Elimina subrayado */
+  display: inline-block; /* Hace que el botón sea inline */
+  font-size: 16px; /* Tamaño de la fuente */
+  cursor: pointer; /* Cambia el cursor cuando pasa sobre el botón */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.mensaje-aviso button:hover {
+  background-color: #45a049; /* Verde más oscuro cuando se pasa el mouse */
 }
 
 /* Animación de aparición del mensaje */
