@@ -2,26 +2,24 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Editor de Imagen</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SOY CONGRESISTA USFX</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="logo-header">
+    <img src="assets/logo.png" alt="Logo" class="logo-img" />
+    <h1>SOY CONGRESISTA USFX</h1>
+    <h2>II CONGRESO INTERNO ESTUDIANTIL 2025</h2>
+  </header>
+
   <div class="container">
-    <h1>Editor de Imagen con Marco</h1>
-
-    <!-- Botón para subir imagen -->
-    <input type="file" id="fileInput" accept="image/*" />
-
-    <!-- Campo de texto para el nombre -->
+    <input type="file" id="imagen" accept=".jpg, .jpeg, .png" />
     <input type="text" id="nombre" placeholder="Escribe tu nombre completo" />
-
-    <!-- Botón para descargar la imagen -->
-    <button id="downloadBtn">Descargar Imagen</button>
-
-    <!-- Lienzo donde se dibuja todo -->
-    <div class="canvas-container">
-      <canvas id="canvas" width="1920" height="1920"></canvas>
+    <button id="descargar" disabled>Descargar Imagen</button>
+    <canvas id="canvas" width="1920" height="1920"></canvas>
+    <div id="mensaje-flotante" class="mensaje-flotante">
+      Imagen subida. Puedes mover y acomodar la imagen.
     </div>
   </div>
 
