@@ -67,6 +67,23 @@ input[type="file"] {
   margin-left: auto; /* Centra horizontalmente */
   margin-right: auto; /* Centra horizontalmente */
 }
+/* Estilo para el input del nombre */
+input#nombre {
+  margin-top: 10px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  color: black;
+  font-weight: bold;
+  cursor: text;
+  font-size: 13px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-transform: uppercase; /* Siempre mayúsculas */
+}
+
+
 
 /* Botón de descarga con fondo amarillo */
 button#descargar {
@@ -98,6 +115,13 @@ button#descargar {
   z-index: 999; /* Asegura que el mensaje aparezca sobre otros elementos */
   animation: aparecer 0.5s ease-out; /* Aplica una animación de aparición */
 }
+/* Estilos para el campo de nombre */
+/* Nuevo estilo para el input de nombre */
+
+
+
+
+
 
 /* Animación de entrada del mensaje */
 @keyframes aparecer {
@@ -109,39 +133,4 @@ button#descargar {
     opacity: 1; /* Aparece completamente */
     transform: translateX(-50%) translateY(0); /* Se posiciona correctamente */
   }
-}
-
-
-/* Botón de descarga amarillo grande */
-#descargar {
-  background-color: #ffcc00;
-  color: #000;
-  border: none;
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease;
-}
-
-#descargar:hover {
-  background-color: #ffdb4d;
-}
-
-/* Mensaje flotante superior */
-#mensaje-flotante {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ffffff;
-  color: #000;
-  padding: 15px 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  font-size: 16px;
-  display: none;
-  z-index: 999;
 }
