@@ -1,128 +1,136 @@
-/* Fondo degradado vertical: rojo arriba, azul abajo */
+/* Fondo con degradado de rojo fuerte a claro (arriba) y azul fuerte a claro (abajo) */
 body {
-  margin: 0;
-  font-family: sans-serif;
-  background: linear-gradient(to bottom, #ff0000, #ffaaaa, #aaaaff, #0000ff);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  margin: 0; /* Elimina los márgenes predeterminados del cuerpo */
+  padding: 0; /* Elimina el relleno interno */
+  font-family: sans-serif; /* Usa una fuente sin serifa para el texto */
+  background: linear-gradient(to bottom, #9b0010, #b0151f 30%, #000080 60%, #0067bc); /* Aplica un fondo degradado de rojo a azul */
+  display: flex; /* Usa flexbox para centrar los elementos */
+  justify-content: center; /* Centra los elementos horizontalmente */
+  align-items: center; /* Centra los elementos verticalmente */
+  min-height: 100vh; /* Garantiza que el contenido ocupe al menos la altura completa de la ventana */
+  flex-direction: column; /* Organiza los elementos en columna */
+  color: white; /* Establece el color del texto como blanco */
 }
 
-/* Contenedor principal vertical */
-.contenedor {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+/* Cabecera con el logo y títulos */
+.logo-header {
+  text-align: center; /* Alinea el contenido al centro */
+  margin-top: 15px; /* Agrega espacio en la parte superior */
 }
 
-/* Logo fijo arriba */
-.logo {
-  width: 150px;
-  height: auto;
-  margin-bottom: 20px;
+/* Tamaño del logo (más grande) */
+.logo-img {
+  width: 160px; /* Establece el ancho de la imagen del logo */
+  height: auto; /* Permite que la altura se ajuste automáticamente */
+  margin-bottom: 3px; /* Agrega espacio debajo de la imagen */
 }
 
-/* Título principal */
-.titulo {
-  font-size: 36px;
-  font-weight: bold;
-  color: white;
-  margin: 0;
+/* Estilos de los títulos */
+h1 {
+  margin: 3px 0; /* Ajusta los márgenes superior e inferior */
+  font-size: 28px; /* Tamaño de fuente grande */
 }
 
-/* Subtítulo */
-.subtitulo {
-  font-size: 24px;
-  color: white;
-  margin: 10px 0 20px 0;
+h2 {
+  margin: 0; /* Elimina los márgenes */
+  font-size: 15px; /* Tamaño de fuente más pequeño */
+  font-weight: normal; /* Define el peso de la fuente como normal */
 }
 
-/* Estilo para el botón de subir imagen */
-.subir-imagen {
-  background-color: white;
-  color: black;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-bottom: 15px;
+/* Contenedor de los elementos */
+.container {
+  text-align: center; /* Alinea los elementos al centro */
+  max-width: 100%; /* Limita el ancho máximo al 100% */
+  padding: 10px; /* Agrega espacio interno alrededor del contenido */
 }
 
-.subir-imagen input {
-  display: none; /* Oculta el input real */
-}
-
-/* Input para escribir nombre */
-.input-nombre {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  width: 250px;
-  margin-bottom: 20px;
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
-/* Contenedor del canvas */
-.canvas-contenedor {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 20px;
-}
-
-/* Canvas centrado */
+/* Canvas (zona donde se edita la imagen) */
 canvas {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  border: 5px solid #ccc; /* Agrega un borde gris claro alrededor del canvas */
+  max-width: 100%; /* Limita el ancho máximo */
+  height: auto; /* Permite que la altura se ajuste automáticamente */
+  touch-action: none; /* Desactiva la acción táctil predeterminada */
+  margin-top: 10px; /* Agrega espacio en la parte superior */
 }
 
-/* Texto flotante (cuando se sube imagen) */
-#mensaje-flotante {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ffffffdd;
-  color: #000;
-  padding: 8px 16px;
-  border-radius: 8px;
-  display: none;
-  font-style: italic;
-  font-weight: bold;
+/* Estilos para botones e input de archivo */
+input[type="file"] {
+  margin-top: 10px; /* Agrega espacio en la parte superior */
+  background: white; /* Establece el fondo blanco */
+  padding: 12px 20px; /* Agrega relleno interno */
+  border-radius: 5px; /* Redondea los bordes */
+  color: red; /* Establece el color del texto en negro */
+  font-weight: bold; /* Hace que el texto sea negrita */
+  cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+  font-size: 13px; /* Establece el tamaño de la fuente */
+  display: block; /* Hace que el input se comporte como un bloque */
+  margin-left: auto; /* Centra horizontalmente */
+  margin-right: auto; /* Centra horizontalmente */
 }
-
-/* Botón de descarga (amarillo) */
-#descargar {
-  background-color: #ffd700;
+/* Estilo para el input del nombre */
+input#nombre {
+  margin-top: 10px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 5px;
   color: black;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: text;
+  font-size: 13px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-transform: uppercase; /* Siempre mayúsculas */
 }
 
-#descargar:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+
+
+/* Botón de descarga con fondo amarillo */
+button#descargar {
+  margin-top: 10px; /* Agrega espacio en la parte superior */
+  background: yellow; /* Establece el fondo amarillo */
+  padding: 12px 20px; /* Agrega relleno interno */
+  border-radius: 8px; /* Redondea los bordes */
+  color: black; /* Establece el color del texto en negro */
+  font-weight: bold; /* Hace que el texto sea negrita */
+  cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+  font-size: 13px; /* Establece el tamaño de la fuente */
+  display: block; /* Hace que el botón se comporte como un bloque */
+  margin-left: auto; /* Centra horizontalmente */
+  margin-right: auto; /* Centra horizontalmente */
 }
 
-/* Responsive para pantallas pequeñas */
-@media (max-width: 600px) {
-  .titulo {
-    font-size: 28px;
+/* Burbuja flotante informativa */
+.mensaje-flotante {
+  display: none; /* Oculta el mensaje por defecto */
+  position: fixed; /* Mantiene el mensaje fijo en la pantalla */
+  bottom: 20px; /* Ubica el mensaje en la parte inferior */
+  left: 50%; /* Centra el mensaje horizontalmente */
+  transform: translateX(-50%); /* Ajusta su posición para estar bien centrado */
+  background: rgba(0, 103, 188, 0.95); /* Establece un fondo azul semi-transparente */
+  color: white; /* Establece el color del texto en blanco */
+  padding: 14px 24px; /* Agrega espacio interno */
+  border-radius: 10px; /* Redondea los bordes */
+  font-size: 16px; /* Establece el tamaño de la fuente */
+  z-index: 999; /* Asegura que el mensaje aparezca sobre otros elementos */
+  animation: aparecer 0.5s ease-out; /* Aplica una animación de aparición */
+}
+/* Estilos para el campo de nombre */
+/* Nuevo estilo para el input de nombre */
+
+
+
+
+
+
+/* Animación de entrada del mensaje */
+@keyframes aparecer {
+  from {
+    opacity: 0; /* Empieza con opacidad cero (invisible) */
+    transform: translateX(-50%) translateY(20px); /* Inicia desplazado hacia abajo */
   }
-  .subtitulo {
-    font-size: 18px;
-  }
-  .input-nombre {
-    width: 90%;
+  to {
+    opacity: 1; /* Aparece completamente */
+    transform: translateX(-50%) translateY(0); /* Se posiciona correctamente */
   }
 }
