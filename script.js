@@ -97,12 +97,12 @@ canvas.addEventListener("touchmove", (e) => {
 });
 
 document.getElementById("descargar").addEventListener("click", () => {
-  // 1. Mostrar el mensaje de aviso
+  // 1. Mostrar el mensaje de aviso con el botón OK
   const mensaje = document.getElementById("mensaje-aviso");
   mensaje.style.display = "block"; // Muestra el mensaje
 
-  // 2. Ocultar el mensaje después de 2 segundos y redirigir
-  setTimeout(() => {
+  // 2. Esperar a que el usuario haga clic en "OK"
+  document.getElementById("confirmar-ok").addEventListener("click", () => {
     // 2.1 Inicia la descarga de la imagen
     const link = document.createElement("a");
     link.download = "imagen_con_nombre.png";
@@ -113,7 +113,7 @@ document.getElementById("descargar").addEventListener("click", () => {
     setTimeout(() => {
       window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
     }, 500); // 500ms después de iniciar la descarga
-  }, 2000); // Muestra el mensaje durante 2 segundos
+  });
 });
 
 
