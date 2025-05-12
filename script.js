@@ -96,13 +96,19 @@ canvas.addEventListener("touchmove", (e) => {
   }
 });
 
-// Descarga la imagen como PNG
 document.getElementById("descargar").addEventListener("click", () => {
+  // 1. Inicia la descarga de la imagen
   const link = document.createElement("a");
-  link.download = "imagen_con_marco.png";
+  link.download = "imagen_con_nombre.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+
+  // 2. Redirige al formulario después de 1 segundo para asegurar que la descarga ocurra primero
+  setTimeout(() => {
+    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLScADVWa0UdVU037NE1UwkhS2RH529WnIFmWOfeX64XIuj6nLw/viewform?usp=dialog";
+  }, 1000); // 1 segundo de retraso
 });
+
 
 function dibujar() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
